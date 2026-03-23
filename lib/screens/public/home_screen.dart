@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
             shadowColor: Colors.black12,
             title: Row(
               children: [
-                Icon(Icons.eco, color: _primary, size: 28),
+                _buildLogo(_config['logo_path'] ?? ''),
                 const SizedBox(width: 8),
                 Flexible(
                   child: Text(siteName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: _primary),
@@ -205,6 +205,22 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }).toList();
+  }
+
+  Widget _buildLogo(String path) {
+    if (path.isEmpty) {
+      return Icon(Icons.eco, color: _primary, size: 28);
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: Image.network(
+        _svc.getPublicImageUrl(path),
+        height: 32,
+        width: 32,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => Icon(Icons.eco, color: _primary, size: 28),
+      ),
+    );
   }
 
   Widget _buildSearchResults() {

@@ -16,6 +16,7 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _fadeAnim;
   late Animation<double> _scaleAnim;
   String _statusText = '';
+  String _logoPath = '';
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
       final config = await SupabaseService.instance.getSiteConfig();
       // Cargar colores dinámicos desde site_config
       ThemeConfig.instance.loadFromConfig(config);
+      _logoPath = config['logo_path'] ?? '';
       setState(() => _statusText = 'Preparando la tienda...');
     } catch (e) {
       setState(() => _statusText = 'Conectando...');
@@ -68,6 +70,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     final primary = ThemeConfig.instance.primary;
     final accent = ThemeConfig.instance.accent;
+    final hasLogo = _logoPath.isNotEmpty;
 
     return Scaffold(
       body: Container(
@@ -89,24 +92,7 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [primary, accent],
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: primary.withValues(alpha: 0.3),
-                              blurRadius: 30,
-                              spreadRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: const Icon(Icons.eco, size: 60, color: Colors.white),
-                      ),
+                      _buildLogoCircle(primary, accent, hasLogo),
                       const SizedBox(height: 32),
                       Text(
                         'Dietética Centro',
@@ -148,6 +134,33 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLogoCircle(Color primary, Color accent, bool hasLogo) {
+    return Container(
+      width: 120,
+      height: 120,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(colors: [primary, accent]),
+        boxShadow: [
+          BoxShadow(
+            color: primary.withValues(alpha: 0.3),
+            blurRadius: 30,
+            spreadRadius: 5,
+          ),
+        ],
+      ),
+      child: hasLogo
+          ? ClipOval(
+              child: Image.network(
+                SupabaseService.instance.getPublicImageUrl(_logoPath),
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Icon(Icons.eco, size: 60, color: Colors.white),
+              ),
+            )
+          : const Icon(Icons.eco, size: 60, color: Colors.white),
     );
   }
 }
