@@ -141,7 +141,7 @@ class _HomeTabState extends State<HomeTab> {
   Widget _buildSectionCard(Map<String, dynamic> s) {
     final published = s['published'] == true;
     return Card(
-      color: const Color(0xFF1A2230),
+      color: const Color(0xFFEFF2F8),
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: Icon(
@@ -267,7 +267,7 @@ class _HomeTabState extends State<HomeTab> {
   // ========== BANNERS ==========
   Widget _buildBannerCard(Map<String, dynamic> b) {
     return Card(
-      color: const Color(0xFF1A2230),
+      color: const Color(0xFFEFF2F8),
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: const Icon(Icons.panorama, size: 20),
@@ -373,7 +373,7 @@ class _HomeTabState extends State<HomeTab> {
   // ========== HOME BANNERS ==========
   Widget _buildHomeBannerCard(Map<String, dynamic> b) {
     return Card(
-      color: const Color(0xFF1A2230),
+      color: const Color(0xFFEFF2F8),
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         title: Text(b['title'] as String? ?? '(Sin título)', style: const TextStyle(fontSize: 14)),
@@ -465,7 +465,7 @@ class _HomeTabState extends State<HomeTab> {
   // ========== NAVBAR ==========
   Widget _buildNavItemCard(Map<String, dynamic> n) {
     return Card(
-      color: const Color(0xFF1A2230),
+      color: const Color(0xFFEFF2F8),
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: const Icon(Icons.link, size: 18),
