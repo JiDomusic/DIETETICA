@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
 
 class ReservationSection extends StatefulWidget {
@@ -26,6 +27,7 @@ class _ReservationSectionState extends State<ReservationSection> {
 
   @override
   Widget build(BuildContext context) {
+    final primary = ThemeConfig.instance.primary;
     final cbuInfo = widget.config['cbu_info'] ?? '';
     final alias = widget.config['alias_cbu'] ?? '';
     final whatsapp = widget.config['whatsapp_default'] ?? '';
@@ -35,54 +37,53 @@ class _ReservationSectionState extends State<ReservationSection> {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF141A22),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF2E7D32).withValues(alpha: 0.3)),
+        border: Border.all(color: primary.withValues(alpha: 0.3)),
+        boxShadow: [BoxShadow(color: primary.withValues(alpha: 0.05), blurRadius: 12)],
       ),
-      child: _success ? _buildSuccessView(whatsapp) : Column(
+      child: _success ? _buildSuccessView(whatsapp, primary) : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.shopping_bag, color: Color(0xFF66BB6A)),
-              SizedBox(width: 8),
-              Text('Reservá tu producto', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              Icon(Icons.shopping_bag, color: primary),
+              const SizedBox(width: 8),
+              const Text('Reservá tu producto', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
             ],
           ),
           const SizedBox(height: 8),
           const Text(
             'Elegí el producto, pagá por CBU y pasá a retirarlo. Te confirmamos por WhatsApp.',
-            style: TextStyle(fontSize: 13, color: Color(0xFF8A9BAE)),
+            style: TextStyle(fontSize: 13, color: Color(0xFF888888)),
           ),
           const SizedBox(height: 20),
 
-          // Datos de pago CBU
           if (cbuInfo.isNotEmpty || alias.isNotEmpty)
             Container(
               padding: const EdgeInsets.all(14),
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: const Color(0xFF2E7D32).withValues(alpha: 0.1),
+                color: primary.withValues(alpha: 0.06),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF2E7D32).withValues(alpha: 0.3)),
+                border: Border.all(color: primary.withValues(alpha: 0.2)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Datos de pago:', style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF66BB6A))),
+                  Text('Datos de pago:', style: TextStyle(fontWeight: FontWeight.w600, color: primary)),
                   if (cbuInfo.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    SelectableText('CBU: $cbuInfo', style: const TextStyle(fontSize: 13)),
+                    SelectableText('CBU: $cbuInfo', style: const TextStyle(fontSize: 13, color: Color(0xFF1A1A1A))),
                   ],
                   if (alias.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    SelectableText('Alias: $alias', style: const TextStyle(fontSize: 13)),
+                    SelectableText('Alias: $alias', style: const TextStyle(fontSize: 13, color: Color(0xFF1A1A1A))),
                   ],
                 ],
               ),
             ),
 
-          // Formulario
           Wrap(
             spacing: 16,
             runSpacing: 16,
@@ -123,22 +124,10 @@ class _ReservationSectionState extends State<ReservationSection> {
             spacing: 16,
             runSpacing: 16,
             children: [
-              SizedBox(
-                width: isMobile ? double.infinity : 250,
-                child: TextFormField(controller: _nameCtrl, decoration: const InputDecoration(labelText: 'Tu nombre *')),
-              ),
-              SizedBox(
-                width: isMobile ? double.infinity : 200,
-                child: TextFormField(controller: _phoneCtrl, decoration: const InputDecoration(labelText: 'Teléfono *'), keyboardType: TextInputType.phone),
-              ),
-              SizedBox(
-                width: isMobile ? double.infinity : 250,
-                child: TextFormField(controller: _emailCtrl, decoration: const InputDecoration(labelText: 'Email (opcional)')),
-              ),
-              SizedBox(
-                width: isMobile ? double.infinity : 300,
-                child: TextFormField(controller: _refCtrl, decoration: const InputDecoration(labelText: 'Nº comprobante CBU (opcional)')),
-              ),
+              SizedBox(width: isMobile ? double.infinity : 250, child: TextFormField(controller: _nameCtrl, decoration: const InputDecoration(labelText: 'Tu nombre *'))),
+              SizedBox(width: isMobile ? double.infinity : 200, child: TextFormField(controller: _phoneCtrl, decoration: const InputDecoration(labelText: 'Teléfono *'), keyboardType: TextInputType.phone)),
+              SizedBox(width: isMobile ? double.infinity : 250, child: TextFormField(controller: _emailCtrl, decoration: const InputDecoration(labelText: 'Email (opcional)'))),
+              SizedBox(width: isMobile ? double.infinity : 300, child: TextFormField(controller: _refCtrl, decoration: const InputDecoration(labelText: 'Nº comprobante CBU (opcional)'))),
             ],
           ),
           const SizedBox(height: 24),
@@ -156,14 +145,14 @@ class _ReservationSectionState extends State<ReservationSection> {
     );
   }
 
-  Widget _buildSuccessView(String whatsapp) {
+  Widget _buildSuccessView(String whatsapp, Color primary) {
     return Column(
       children: [
-        const Icon(Icons.check_circle, color: Color(0xFF66BB6A), size: 64),
+        Icon(Icons.check_circle, color: primary, size: 64),
         const SizedBox(height: 16),
-        const Text('¡Reserva enviada con éxito!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+        const Text('¡Reserva enviada con éxito!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
         const SizedBox(height: 8),
-        const Text('Te confirmaremos por WhatsApp.', style: TextStyle(color: Color(0xFF8A9BAE))),
+        const Text('Te confirmaremos por WhatsApp.', style: TextStyle(color: Color(0xFF888888))),
         const SizedBox(height: 20),
         if (whatsapp.isNotEmpty)
           ElevatedButton.icon(

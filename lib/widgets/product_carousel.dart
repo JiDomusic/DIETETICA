@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
 
 class ProductCarousel extends StatelessWidget {
@@ -8,10 +9,12 @@ class ProductCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = ThemeConfig.instance.primary;
+
     if (products.isEmpty) {
       return const Padding(
         padding: EdgeInsets.all(20),
-        child: Center(child: Text('Próximamente...', style: TextStyle(color: Color(0xFF8A9BAE)))),
+        child: Center(child: Text('Próximamente...', style: TextStyle(color: Color(0xFF888888)))),
       );
     }
 
@@ -32,8 +35,10 @@ class ProductCarousel extends StatelessWidget {
             width: 180,
             margin: const EdgeInsets.only(right: 14),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A2230),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFE8E8E8)),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8, offset: const Offset(0, 2))],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,30 +50,24 @@ class ProductCarousel extends StatelessWidget {
                       child: imgPath.isNotEmpty
                           ? Image.network(
                               SupabaseService.instance.getPublicImageUrl(imgPath),
-                              height: 160,
-                              width: 180,
-                              fit: BoxFit.cover,
+                              height: 160, width: 180, fit: BoxFit.cover,
                               errorBuilder: (_, __, ___) => Container(
-                                height: 160, width: 180, color: const Color(0xFF2A3545),
-                                child: const Icon(Icons.eco, color: Color(0xFF66BB6A), size: 36),
+                                height: 160, width: 180, color: primary.withValues(alpha: 0.08),
+                                child: Icon(Icons.eco, color: primary, size: 36),
                               ),
                             )
                           : Container(
-                              height: 160, width: 180, color: const Color(0xFF2A3545),
-                              child: const Icon(Icons.eco, color: Color(0xFF66BB6A), size: 36),
+                              height: 160, width: 180, color: primary.withValues(alpha: 0.08),
+                              child: Icon(Icons.eco, color: primary, size: 36),
                             ),
                     ),
                     if (isNew)
                       Positioned(
-                        top: 8,
-                        left: 8,
+                        top: 8, left: 8,
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF2E7D32),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text('NUEVO', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700)),
+                          decoration: BoxDecoration(color: primary, borderRadius: BorderRadius.circular(8)),
+                          child: const Text('NUEVO', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white)),
                         ),
                       ),
                   ],
@@ -78,11 +77,9 @@ class ProductCarousel extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13), maxLines: 2, overflow: TextOverflow.ellipsis),
+                      Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Color(0xFF1A1A1A)), maxLines: 2, overflow: TextOverflow.ellipsis),
                       const SizedBox(height: 6),
-                      Text('\$ ${price.toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF66BB6A)),
-                      ),
+                      Text('\$ ${price.toStringAsFixed(2)}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: primary)),
                     ],
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
 import 'public/home_screen.dart';
 
@@ -37,14 +38,14 @@ class _SplashScreenState extends State<SplashScreen>
     setState(() => _statusText = 'Cargando configuración...');
 
     try {
-      // Pre-cargar config del sitio
-      await SupabaseService.instance.getSiteConfig();
+      final config = await SupabaseService.instance.getSiteConfig();
+      // Cargar colores dinámicos desde site_config
+      ThemeConfig.instance.loadFromConfig(config);
       setState(() => _statusText = 'Preparando la tienda...');
     } catch (e) {
       setState(() => _statusText = 'Conectando...');
     }
 
-    // Esperar animación mínima
     await Future.delayed(const Duration(seconds: 3));
 
     if (!mounted) return;
@@ -65,13 +66,16 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final primary = ThemeConfig.instance.primary;
+    final accent = ThemeConfig.instance.accent;
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF0A0E14), Color(0xFF1A2230), Color(0xFF0A0E14)],
+            colors: [Colors.white, primary.withValues(alpha: 0.05), Colors.white],
           ),
         ),
         child: Center(
@@ -85,18 +89,17 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Logo / Icono
                       Container(
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF2E7D32), Color(0xFF66BB6A)],
+                          gradient: LinearGradient(
+                            colors: [primary, accent],
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF2E7D32).withValues(alpha: 0.4),
+                              color: primary.withValues(alpha: 0.3),
                               blurRadius: 30,
                               spreadRadius: 5,
                             ),
@@ -109,7 +112,7 @@ class _SplashScreenState extends State<SplashScreen>
                         'Dietética Centro',
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: const Color(0xFF1A1A1A),
                           letterSpacing: 1.2,
                         ),
                       ),
@@ -117,7 +120,7 @@ class _SplashScreenState extends State<SplashScreen>
                       Text(
                         'Alimentos saludables',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: const Color(0xFF66BB6A),
+                          color: primary,
                           letterSpacing: 2,
                         ),
                       ),
@@ -127,16 +130,14 @@ class _SplashScreenState extends State<SplashScreen>
                         height: 32,
                         child: CircularProgressIndicator(
                           strokeWidth: 2.5,
-                          valueColor: AlwaysStoppedAnimation(
-                            const Color(0xFF2E7D32).withValues(alpha: 0.7),
-                          ),
+                          valueColor: AlwaysStoppedAnimation(primary.withValues(alpha: 0.7)),
                         ),
                       ),
                       const SizedBox(height: 16),
                       Text(
                         _statusText,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: const Color(0xFF8A9BAE),
+                          color: const Color(0xFF888888),
                         ),
                       ),
                     ],

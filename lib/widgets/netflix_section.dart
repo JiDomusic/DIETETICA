@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
 
 class NetflixSection extends StatelessWidget {
@@ -9,9 +10,10 @@ class NetflixSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = ThemeConfig.instance.primary;
+
     if (products.isEmpty) return const SizedBox.shrink();
 
-    // Agrupar por categoría
     final grouped = <String, List<Map<String, dynamic>>>{};
     for (final p in products) {
       final catName = (p['categories'] as Map?)?['name'] as String? ?? 'Sin categoría';
@@ -28,7 +30,7 @@ class NetflixSection extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Text(entry.key, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+                child: Text(entry.key, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: primary)),
               ),
               SizedBox(
                 height: 200,
@@ -46,7 +48,9 @@ class NetflixSection extends StatelessWidget {
                       margin: const EdgeInsets.only(right: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: const Color(0xFF1A2230),
+                        color: Colors.white,
+                        border: Border.all(color: const Color(0xFFE8E8E8)),
+                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,18 +62,18 @@ class NetflixSection extends StatelessWidget {
                                     SupabaseService.instance.getPublicImageUrl(imgPath),
                                     height: 150, width: 140, fit: BoxFit.cover,
                                     errorBuilder: (_, __, ___) => Container(
-                                      height: 150, width: 140, color: const Color(0xFF2A3545),
-                                      child: const Icon(Icons.eco, color: Color(0xFF66BB6A)),
+                                      height: 150, width: 140, color: primary.withValues(alpha: 0.08),
+                                      child: Icon(Icons.eco, color: primary),
                                     ),
                                   )
                                 : Container(
-                                    height: 150, width: 140, color: const Color(0xFF2A3545),
-                                    child: const Icon(Icons.eco, color: Color(0xFF66BB6A)),
+                                    height: 150, width: 140, color: primary.withValues(alpha: 0.08),
+                                    child: Icon(Icons.eco, color: primary),
                                   ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8),
-                            child: Text(name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                            child: Text(name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Color(0xFF1A1A1A)),
                               maxLines: 2, overflow: TextOverflow.ellipsis),
                           ),
                         ],

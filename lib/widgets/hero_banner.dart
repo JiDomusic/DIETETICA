@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
 
 class HeroBanner extends StatefulWidget {
@@ -33,19 +34,22 @@ class _HeroBannerState extends State<HeroBanner> {
 
   @override
   Widget build(BuildContext context) {
+    final primary = ThemeConfig.instance.primary;
+    final accent = ThemeConfig.instance.accent;
+
     if (_allBanners.isEmpty) {
       return Container(
         height: 300,
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF1B5E20)]),
+          gradient: LinearGradient(colors: [primary, accent]),
           borderRadius: BorderRadius.circular(20),
         ),
         child: const Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.eco, size: 60, color: Colors.white70),
+              Icon(Icons.eco, size: 60, color: Colors.white),
               SizedBox(height: 12),
               Text('Dietética Centro', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.white)),
               Text('Alimentos saludables para tu bienestar', style: TextStyle(fontSize: 14, color: Colors.white70)),
@@ -73,7 +77,7 @@ class _HeroBannerState extends State<HeroBanner> {
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: const Color(0xFF1A2230),
+                  color: const Color(0xFFF0F0F0),
                 ),
                 child: Stack(
                   fit: StackFit.expand,
@@ -87,18 +91,16 @@ class _HeroBannerState extends State<HeroBanner> {
                           errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                         ),
                       ),
-                    // Gradient overlay
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, Colors.black.withValues(alpha: 0.7)],
+                          colors: [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
                         ),
                       ),
                     ),
-                    // Text
                     Positioned(
                       bottom: 32,
                       left: 24,
@@ -120,7 +122,6 @@ class _HeroBannerState extends State<HeroBanner> {
               );
             },
           ),
-          // Dots
           if (_allBanners.length > 1)
             Positioned(
               bottom: 12,
@@ -135,7 +136,7 @@ class _HeroBannerState extends State<HeroBanner> {
                     height: 8,
                     margin: const EdgeInsets.symmetric(horizontal: 3),
                     decoration: BoxDecoration(
-                      color: _currentPage == i ? const Color(0xFF66BB6A) : const Color(0xFF8A9BAE),
+                      color: _currentPage == i ? primary : Colors.white54,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),

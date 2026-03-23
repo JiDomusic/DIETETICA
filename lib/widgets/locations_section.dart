@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
 
 class LocationsSection extends StatelessWidget {
@@ -25,6 +26,7 @@ class LocationsSection extends StatelessWidget {
   }
 
   Widget _buildLocationCard(BuildContext context, Map<String, dynamic> loc) {
+    final primary = ThemeConfig.instance.primary;
     final name = loc['name'] as String? ?? '';
     final address = loc['address'] as String? ?? '';
     final phone = loc['phone'] as String? ?? '';
@@ -32,20 +34,19 @@ class LocationsSection extends StatelessWidget {
     final mapUrl = loc['map_url'] as String? ?? '';
     final horario = loc['horario'] as String? ?? '';
     final imgPath = loc['image_path'] as String? ?? '';
-
     final encodedAddress = Uri.encodeComponent(address);
 
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A2230),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF2A3545)),
+        border: Border.all(color: const Color(0xFFE8E8E8)),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Imagen de la sucursal o placeholder con link a Maps
           if (imgPath.isNotEmpty)
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
@@ -53,8 +54,8 @@ class LocationsSection extends StatelessWidget {
                 SupabaseService.instance.getPublicImageUrl(imgPath),
                 height: 180, width: double.infinity, fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  height: 180, color: const Color(0xFF2A3545),
-                  child: const Icon(Icons.store, size: 48, color: Color(0xFF66BB6A)),
+                  height: 180, color: primary.withValues(alpha: 0.08),
+                  child: Icon(Icons.store, size: 48, color: primary),
                 ),
               ),
             ),
@@ -63,17 +64,17 @@ class LocationsSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: primary)),
                 const SizedBox(height: 8),
                 if (address.isNotEmpty)
-                  _infoRow(Icons.location_on, address, onTap: () {
+                  _infoRow(Icons.location_on, address, primary, onTap: () {
                     final url = mapUrl.isNotEmpty ? mapUrl : 'https://www.google.com/maps/search/$encodedAddress';
                     launchUrl(Uri.parse(url));
                   }),
                 if (phone.isNotEmpty)
-                  _infoRow(Icons.phone, phone, onTap: () => launchUrl(Uri.parse('tel:$phone'))),
+                  _infoRow(Icons.phone, phone, primary, onTap: () => launchUrl(Uri.parse('tel:$phone'))),
                 if (horario.isNotEmpty)
-                  _infoRow(Icons.schedule, horario),
+                  _infoRow(Icons.schedule, horario, primary),
                 if (whatsapp.isNotEmpty) ...[
                   const SizedBox(height: 12),
                   SizedBox(
@@ -94,7 +95,7 @@ class LocationsSection extends StatelessWidget {
     );
   }
 
-  Widget _infoRow(IconData icon, String text, {VoidCallback? onTap}) {
+  Widget _infoRow(IconData icon, String text, Color primary, {VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: InkWell(
@@ -102,11 +103,11 @@ class LocationsSection extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 16, color: const Color(0xFF66BB6A)),
+            Icon(icon, size: 16, color: primary),
             const SizedBox(width: 8),
             Expanded(child: Text(text, style: TextStyle(
               fontSize: 13,
-              color: onTap != null ? const Color(0xFF66BB6A) : const Color(0xFF8A9BAE),
+              color: onTap != null ? primary : const Color(0xFF555555),
               decoration: onTap != null ? TextDecoration.underline : null,
             ))),
           ],

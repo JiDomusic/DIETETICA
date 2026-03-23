@@ -27,7 +27,8 @@ class GalleryCarousel extends StatelessWidget {
             margin: const EdgeInsets.only(right: 14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              color: const Color(0xFF1A2230),
+              color: const Color(0xFFF5F5F5),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 8, offset: const Offset(0, 2))],
             ),
             child: Stack(
               fit: StackFit.expand,
@@ -39,17 +40,15 @@ class GalleryCarousel extends StatelessWidget {
                           SupabaseService.instance.getPublicImageUrl(imgPath),
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(
-                            color: const Color(0xFF2A3545),
-                            child: const Icon(Icons.photo, size: 40, color: Color(0xFF8A9BAE)),
+                            color: const Color(0xFFF0F0F0),
+                            child: Icon(Icons.photo, size: 40, color: Colors.grey[400]),
                           ),
                         )
-                      : Container(color: const Color(0xFF2A3545), child: const Icon(Icons.photo, size: 40, color: Color(0xFF8A9BAE))),
+                      : Container(color: const Color(0xFFF0F0F0), child: Icon(Icons.photo, size: 40, color: Colors.grey[400])),
                 ),
                 if (title.isNotEmpty || desc.isNotEmpty)
                   Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
+                    bottom: 0, left: 0, right: 0,
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -57,14 +56,14 @@ class GalleryCarousel extends StatelessWidget {
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, Colors.black.withValues(alpha: 0.8)],
+                          colors: [Colors.transparent, Colors.black.withValues(alpha: 0.7)],
                         ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (title.isNotEmpty) Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                          if (desc.isNotEmpty) Text(desc, style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)), maxLines: 2),
+                          if (title.isNotEmpty) Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white)),
+                          if (desc.isNotEmpty) Text(desc, style: const TextStyle(fontSize: 12, color: Colors.white70), maxLines: 2),
                         ],
                       ),
                     ),

@@ -39,8 +39,9 @@ class VideoGrid extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF1A2230),
+                color: const Color(0xFFF5F5F5),
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 8)],
               ),
               child: Stack(
                 fit: StackFit.expand,
@@ -59,7 +60,7 @@ class VideoGrid extends StatelessWidget {
                       width: 56, height: 56,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.black.withValues(alpha: 0.6),
+                        color: Colors.black.withValues(alpha: 0.5),
                       ),
                       child: const Icon(Icons.play_arrow, color: Colors.white, size: 36),
                     ),
@@ -73,16 +74,16 @@ class VideoGrid extends StatelessWidget {
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, Colors.black.withValues(alpha: 0.8)],
+                          colors: [Colors.transparent, Colors.black.withValues(alpha: 0.7)],
                         ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                          Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white)),
                           if (desc.isNotEmpty)
-                            Text(desc, style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE)), maxLines: 2),
+                            Text(desc, style: const TextStyle(fontSize: 11, color: Colors.white70), maxLines: 2),
                         ],
                       ),
                     ),

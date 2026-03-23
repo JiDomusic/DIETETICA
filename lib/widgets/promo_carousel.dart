@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
 
 class PromoCarousel extends StatelessWidget {
@@ -9,10 +10,13 @@ class PromoCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = ThemeConfig.instance.primary;
+    final secondary = ThemeConfig.instance.secondary;
+
     if (promos.isEmpty) {
       return const Padding(
         padding: EdgeInsets.all(20),
-        child: Center(child: Text('Sin promociones por ahora', style: TextStyle(color: Color(0xFF8A9BAE)))),
+        child: Center(child: Text('Sin promociones por ahora', style: TextStyle(color: Color(0xFF888888)))),
       );
     }
 
@@ -36,9 +40,10 @@ class PromoCarousel extends StatelessWidget {
             width: 220,
             margin: const EdgeInsets.only(right: 14),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A2230),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFFF8F00).withValues(alpha: 0.5), width: 1.5),
+              border: Border.all(color: secondary.withValues(alpha: 0.5), width: 1.5),
+              boxShadow: [BoxShadow(color: secondary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 2))],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,20 +56,20 @@ class PromoCarousel extends StatelessWidget {
                           ? Image.network(
                               SupabaseService.instance.getPublicImageUrl(imgPath),
                               height: 160, width: 220, fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(height: 160, width: 220, color: const Color(0xFF2A3545),
-                                child: const Icon(Icons.local_offer, color: Color(0xFFFF8F00), size: 40)),
+                              errorBuilder: (_, __, ___) => Container(height: 160, width: 220, color: secondary.withValues(alpha: 0.08),
+                                child: Icon(Icons.local_offer, color: secondary, size: 40)),
                             )
-                          : Container(height: 160, width: 220, color: const Color(0xFF2A3545),
-                              child: const Icon(Icons.local_offer, color: Color(0xFFFF8F00), size: 40)),
+                          : Container(height: 160, width: 220, color: secondary.withValues(alpha: 0.08),
+                              child: Icon(Icons.local_offer, color: secondary, size: 40)),
                     ),
                     if (discountPct != null && discountPct > 0)
                       Positioned(
                         top: 8, right: 8,
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(color: const Color(0xFFFF8F00), borderRadius: BorderRadius.circular(10)),
+                          decoration: BoxDecoration(color: secondary, borderRadius: BorderRadius.circular(10)),
                           child: Text('-${discountPct.toStringAsFixed(0)}%',
-                            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black)),
+                            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.white)),
                         ),
                       ),
                   ],
@@ -74,21 +79,21 @@ class PromoCarousel extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A)), maxLines: 1, overflow: TextOverflow.ellipsis),
                       if (promoText.isNotEmpty) ...[
                         const SizedBox(height: 3),
-                        Text(promoText, style: const TextStyle(fontSize: 11, color: Color(0xFFFF8F00)), maxLines: 2, overflow: TextOverflow.ellipsis),
+                        Text(promoText, style: TextStyle(fontSize: 11, color: secondary), maxLines: 2, overflow: TextOverflow.ellipsis),
                       ],
                       const SizedBox(height: 8),
                       Row(
                         children: [
                           if (originalPrice != null && promoPrice != null) ...[
                             Text('\$ ${originalPrice.toStringAsFixed(2)}',
-                              style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE), decoration: TextDecoration.lineThrough)),
+                              style: const TextStyle(fontSize: 12, color: Color(0xFFAAAAAA), decoration: TextDecoration.lineThrough)),
                             const SizedBox(width: 8),
                           ],
                           Text('\$ ${(promoPrice ?? originalPrice ?? 0).toStringAsFixed(2)}',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF66BB6A))),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: primary)),
                         ],
                       ),
                     ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../config/theme_config.dart';
 import '../../services/supabase_service.dart';
-import '../../config/app_config.dart';
 import '../../widgets/hero_banner.dart';
 import '../../widgets/product_carousel.dart';
 import '../../widgets/netflix_section.dart';
@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
   String _searchQuery = '';
 
-  // Datos cargados
   List<Map<String, dynamic>> _products = [];
   List<Map<String, dynamic>> _categories = [];
   List<Map<String, dynamic>> _promos = [];
@@ -78,6 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
         _banners = results[10] as List<Map<String, dynamic>>;
         _loading = false;
       });
+
+      // Actualizar colores dinámicos
+      ThemeConfig.instance.loadFromConfig(_config);
     } catch (e) {
       if (mounted) setState(() => _loading = false);
     }
@@ -85,11 +87,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool get _isMobile => MediaQuery.of(context).size.width < 768;
 
+  Color get _primary => ThemeConfig.instance.primary;
+  Color get _accent => ThemeConfig.instance.accent;
+
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator(color: _primary)),
       );
     }
 
@@ -97,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final whatsapp = _config['whatsapp_default'] ?? '';
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -105,15 +111,21 @@ class _HomeScreenState extends State<HomeScreen> {
             floating: true,
             snap: true,
             expandedHeight: _isMobile ? 56 : 64,
-            backgroundColor: const Color(0xFF0A0E14).withValues(alpha: 0.95),
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
+            elevation: 1,
+            shadowColor: Colors.black12,
             title: Row(
               children: [
-                const Icon(Icons.eco, color: Color(0xFF66BB6A), size: 28),
+                Icon(Icons.eco, color: _primary, size: 28),
                 const SizedBox(width: 8),
-                Text(siteName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                Flexible(
+                  child: Text(siteName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: _primary),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 const Spacer(),
                 if (!_isMobile) ..._buildNavLinks(),
-                // Buscador
                 SizedBox(
                   width: _isMobile ? 120 : 200,
                   height: 36,
@@ -125,17 +137,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       contentPadding: EdgeInsets.zero,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none,
+                        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
                       ),
                       filled: true,
-                      fillColor: const Color(0xFF1A2230),
+                      fillColor: const Color(0xFFF5F5F5),
                     ),
                     style: const TextStyle(fontSize: 13),
                   ),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.admin_panel_settings, size: 20),
+                  icon: Icon(Icons.admin_panel_settings, size: 20, color: Colors.grey[600]),
                   tooltip: 'Admin',
                   onPressed: () => Navigator.push(
                     context,
@@ -150,7 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
           if (_searchQuery.isNotEmpty)
             _buildSearchResults()
           else ...[
-            // ========== SECCIONES DINÁMICAS ==========
             for (final section in _sections)
               _buildSection(section),
           ],
@@ -171,13 +186,12 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 6),
         child: TextButton(
           onPressed: () {
-            // Scroll a la sección
             final slug = item['section_slug'] as String?;
             if (slug != null) {
               final idx = _sections.indexWhere((s) => s['slug'] == slug);
               if (idx >= 0) {
                 _scrollController.animateTo(
-                  idx * 400.0, // Aproximado
+                  idx * 400.0,
                   duration: const Duration(milliseconds: 600),
                   curve: Curves.easeInOut,
                 );
@@ -186,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Text(
             item['label'] as String? ?? '',
-            style: const TextStyle(color: Color(0xFFF5F5F5), fontSize: 13),
+            style: TextStyle(color: _primary, fontSize: 13, fontWeight: FontWeight.w500),
           ),
         ),
       );
@@ -207,14 +221,14 @@ class _HomeScreenState extends State<HomeScreen> {
         delegate: SliverChildListDelegate([
           Text(
             'Resultados para "${_searchQuery}" (${filtered.length})',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A)),
           ),
           const SizedBox(height: 16),
           if (filtered.isEmpty)
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(40),
-                child: Text('No se encontraron productos', style: TextStyle(color: Color(0xFF8A9BAE))),
+                child: Text('No se encontraron productos', style: TextStyle(color: Color(0xFF888888))),
               ),
             )
           else
@@ -238,9 +252,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       width: _isMobile ? MediaQuery.of(context).size.width - 40 : 220,
       decoration: BoxDecoration(
-        color: const Color(0xFF1A2230),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: isPromo ? Border.all(color: const Color(0xFFFF8F00), width: 2) : null,
+        border: Border.all(color: isPromo ? _primary : const Color(0xFFE8E8E8)),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 2)),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,14 +272,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     fit: BoxFit.cover,
                     errorBuilder: (_, __, ___) => Container(
                       height: 160,
-                      color: const Color(0xFF2A3545),
-                      child: const Icon(Icons.image, size: 40, color: Color(0xFF8A9BAE)),
+                      color: const Color(0xFFF0F0F0),
+                      child: Icon(Icons.image, size: 40, color: Colors.grey[400]),
                     ),
                   )
                 : Container(
                     height: 160,
-                    color: const Color(0xFF2A3545),
-                    child: const Center(child: Icon(Icons.eco, size: 40, color: Color(0xFF66BB6A))),
+                    color: _primary.withValues(alpha: 0.08),
+                    child: Center(child: Icon(Icons.eco, size: 40, color: _primary)),
                   ),
           ),
           Padding(
@@ -275,20 +292,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     margin: const EdgeInsets.only(bottom: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFF8F00),
+                      color: _primary,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Text('PROMO', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.black)),
+                    child: const Text('PROMO', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white)),
                   ),
-                Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14), maxLines: 2, overflow: TextOverflow.ellipsis),
+                Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A)), maxLines: 2, overflow: TextOverflow.ellipsis),
                 if (desc.isNotEmpty) ...[
                   const SizedBox(height: 4),
-                  Text(desc, style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)), maxLines: 2, overflow: TextOverflow.ellipsis),
+                  Text(desc, style: const TextStyle(fontSize: 12, color: Color(0xFF888888)), maxLines: 2, overflow: TextOverflow.ellipsis),
                 ],
                 const SizedBox(height: 8),
                 Text(
                   '\$ ${(price as num?)?.toStringAsFixed(2) ?? '0.00'}',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF66BB6A)),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: _primary),
                 ),
               ],
             ),
@@ -345,10 +362,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+                    Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: _primary)),
                     if (subtitle.isNotEmpty) ...[
                       const SizedBox(height: 4),
-                      Text(subtitle, style: const TextStyle(fontSize: 14, color: Color(0xFF8A9BAE))),
+                      Text(subtitle, style: const TextStyle(fontSize: 14, color: Color(0xFF888888))),
                     ],
                   ],
                 ),
@@ -370,10 +387,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-      color: const Color(0xFF0D1117),
+      color: _primary.withValues(alpha: 0.05),
       child: Column(
         children: [
-          const Divider(color: Color(0xFF2A3545)),
+          Divider(color: _primary.withValues(alpha: 0.2)),
           const SizedBox(height: 20),
           Wrap(
             spacing: 24,
@@ -382,36 +399,36 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               if (horario.isNotEmpty)
                 Row(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(Icons.schedule, size: 16, color: Color(0xFF66BB6A)),
+                  Icon(Icons.schedule, size: 16, color: _primary),
                   const SizedBox(width: 6),
-                  Text(horario, style: const TextStyle(fontSize: 13, color: Color(0xFF8A9BAE))),
+                  Text(horario, style: const TextStyle(fontSize: 13, color: Color(0xFF555555))),
                 ]),
               if (email.isNotEmpty)
                 Row(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(Icons.email, size: 16, color: Color(0xFF66BB6A)),
+                  Icon(Icons.email, size: 16, color: _primary),
                   const SizedBox(width: 6),
-                  Text(email, style: const TextStyle(fontSize: 13, color: Color(0xFF8A9BAE))),
+                  Text(email, style: const TextStyle(fontSize: 13, color: Color(0xFF555555))),
                 ]),
               if (instagram.isNotEmpty)
                 IconButton(
-                  icon: const Icon(Icons.camera_alt, color: Color(0xFF8A9BAE), size: 20),
+                  icon: Icon(Icons.camera_alt, color: _primary, size: 20),
                   onPressed: () => launchUrl(Uri.parse(instagram)),
                   tooltip: 'Instagram',
                 ),
               if (facebook.isNotEmpty)
                 IconButton(
-                  icon: const Icon(Icons.facebook, color: Color(0xFF8A9BAE), size: 20),
+                  icon: Icon(Icons.facebook, color: _primary, size: 20),
                   onPressed: () => launchUrl(Uri.parse(facebook)),
                   tooltip: 'Facebook',
                 ),
             ],
           ),
           const SizedBox(height: 16),
-          Text(footerText, style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          Text(footerText, style: const TextStyle(fontSize: 12, color: Color(0xFF888888))),
           const SizedBox(height: 8),
           const Text(
             'Desarrollado por Programación JJ',
-            style: TextStyle(fontSize: 11, color: Color(0xFF5A6A7E)),
+            style: TextStyle(fontSize: 11, color: Color(0xFFAAAAAA)),
           ),
         ],
       ),

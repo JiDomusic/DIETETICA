@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
 
 class CategoryGrid extends StatelessWidget {
@@ -8,6 +9,8 @@ class CategoryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = ThemeConfig.instance.primary;
+
     if (categories.isEmpty) return const SizedBox.shrink();
 
     final isMobile = MediaQuery.of(context).size.width < 768;
@@ -33,14 +36,8 @@ class CategoryGrid extends StatelessWidget {
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  const Color(0xFF2E7D32).withValues(alpha: 0.3),
-                  const Color(0xFF1A2230),
-                ],
-              ),
+              color: primary.withValues(alpha: 0.08),
+              border: Border.all(color: primary.withValues(alpha: 0.15)),
             ),
             child: Stack(
               fit: StackFit.expand,
@@ -60,7 +57,7 @@ class CategoryGrid extends StatelessWidget {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black.withValues(alpha: 0.7)],
+                      colors: [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
                     ),
                   ),
                 ),
