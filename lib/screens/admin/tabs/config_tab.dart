@@ -16,6 +16,7 @@ class _ConfigTabState extends State<ConfigTab> {
   List<Map<String, dynamic>> _admins = [];
   bool _loading = true;
   bool _saving = false;
+  bool _lastSaveSuccess = false;
 
   // Controllers para campos de texto
   final _controllers = <String, TextEditingController>{};
@@ -54,12 +55,8 @@ class _ConfigTabState extends State<ConfigTab> {
 
   /// Convierte Color a hex (#2E7D32)
   String _colorToHex(Color c) {
-    final r = (c.r * 255.0).round().clamp(0, 255);
-    final g = (c.g * 255.0).round().clamp(0, 255);
-    final b = (c.b * 255.0).round().clamp(0, 255);
-    return '#${r.toRadixString(16).padLeft(2, '0')}'
-        '${g.toRadixString(16).padLeft(2, '0')}'
-        '${b.toRadixString(16).padLeft(2, '0')}'.toUpperCase();
+    final rgb = c.value & 0xFFFFFF;
+    return '#${rgb.toRadixString(16).padLeft(6, '0').toUpperCase()}';
   }
 
   Future<void> _load() async {
@@ -77,9 +74,9 @@ class _ConfigTabState extends State<ConfigTab> {
     }
 
     // Inicializar colores desde config
-    _primaryColor = _hexToColor(_config['primary_color'] ?? '#2E7D32');
-    _secondaryColor = _hexToColor(_config['secondary_color'] ?? '#FF8F00');
-    _accentColor = _hexToColor(_config['accent_color'] ?? '#1B5E20');
+    _primaryColor = _hexToColor(_config['color_primary'] ?? _config['primary_color'] ?? '#2E7D32');
+    _secondaryColor = _hexToColor(_config['color_secondary'] ?? _config['secondary_color'] ?? '#FF8F00');
+    _accentColor = _hexToColor(_config['color_accent'] ?? _config['accent_color'] ?? '#1B5E20');
 
     setState(() => _loading = false);
   }
@@ -176,7 +173,10 @@ class _ConfigTabState extends State<ConfigTab> {
   }
 
   Future<void> _saveAll() async {
-    setState(() => _saving = true);
+    setState(() {
+      _saving = true;
+      _lastSaveSuccess = false;
+    });
     try {
       // Guardar campos de texto
       for (final field in _textFields) {
@@ -190,7 +190,10 @@ class _ConfigTabState extends State<ConfigTab> {
       await _svc.updateSiteConfig('secondary_color', _colorToHex(_secondaryColor));
       await _svc.updateSiteConfig('accent_color', _colorToHex(_accentColor));
 
-      if (mounted) showSuccessSnack(context, 'Configuración guardada con éxito');
+      if (mounted) {
+        showSuccessSnack(context, 'Configuración guardada con éxito');
+        setState(() => _lastSaveSuccess = true);
+      }
     } catch (e) {
       if (mounted) showSuccessSnack(context, 'Error: $e', isError: true);
     }
@@ -341,8 +344,8 @@ class _ConfigTabState extends State<ConfigTab> {
               onPressed: _saving ? null : _saveAll,
               icon: _saving
                   ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                  : const Icon(Icons.save),
-              label: Text(_saving ? 'Guardando...' : 'Guardar Configuración'),
+                  : Icon(_lastSaveSuccess ? Icons.check_circle : Icons.save),
+              label: Text(_saving ? 'Guardando...' : (_lastSaveSuccess ? 'Guardado con éxito' : 'Guardar Configuración')),
             ),
           ),
 

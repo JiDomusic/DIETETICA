@@ -14,16 +14,24 @@ class ThemeConfig {
   VoidCallback? onColorsChanged;
 
   void loadFromConfig(Map<String, String> config) {
-    if (config['color_primary'] != null && config['color_primary']!.isNotEmpty) {
-      primary = _hexToColor(config['color_primary']!);
-    }
-    if (config['color_secondary'] != null && config['color_secondary']!.isNotEmpty) {
-      secondary = _hexToColor(config['color_secondary']!);
-    }
-    if (config['color_accent'] != null && config['color_accent']!.isNotEmpty) {
-      accent = _hexToColor(config['color_accent']!);
-    }
+    primary = _pickColor(config, ['color_primary', 'primary_color'], primary);
+    secondary = _pickColor(config, ['color_secondary', 'secondary_color'], secondary);
+    accent = _pickColor(config, ['color_accent', 'accent_color'], accent);
     onColorsChanged?.call();
+  }
+
+  Color _pickColor(Map<String, String> config, List<String> keys, Color fallback) {
+    for (final key in keys) {
+      final value = config[key];
+      if (value != null && value.isNotEmpty) {
+        try {
+          return _hexToColor(value);
+        } catch (_) {
+          // Si el valor viene inválido, seguimos buscando o usamos el fallback.
+        }
+      }
+    }
+    return fallback;
   }
 
   Color _hexToColor(String hex) {
