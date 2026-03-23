@@ -400,7 +400,8 @@ class _ConfigTabState extends State<ConfigTab> {
             folder: 'config',
             onChanged: (path) async {
               await _svc.updateSiteConfig('logo_path', path);
-              if (mounted) showSuccessSnack(context, 'Logo actualizado');
+              if (!mounted) return;
+              showSuccessSnack(context, 'Logo actualizado');
               _load();
             },
           ),
