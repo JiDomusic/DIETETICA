@@ -8,9 +8,22 @@ set -e
 
 echo "🌿 Construyendo Dietética Centro..."
 
-# Verificar que las variables estén definidas
-SUPABASE_URL="https://cupvpsysisybfyexnrtt.supabase.co"
-SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1cHZwc3lzaXN5YmZ5ZXhucnR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyODg1MjQsImV4cCI6MjA4OTg2NDUyNH0.VN8Hf4tNTiIMhtTI2tuobG-AsP7Iw_9lMvRaAzXAFt4"
+# Las credenciales se leen de variables de entorno.
+# Configurá antes de ejecutar:
+#   export SUPABASE_URL="https://tu-proyecto.supabase.co"
+#   export SUPABASE_ANON_KEY="tu-anon-key-aqui"
+# O crealas en un archivo .env (NO commitear):
+#   source .env
+if [ -f .env ]; then
+  source .env
+fi
+
+if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+  echo "ERROR: Definí SUPABASE_URL y SUPABASE_ANON_KEY como variables de entorno"
+  echo "  export SUPABASE_URL=\"https://tu-proyecto.supabase.co\""
+  echo "  export SUPABASE_ANON_KEY=\"tu-anon-key\""
+  exit 1
+fi
 
 flutter build web --release \
   --dart-define=SUPABASE_URL="$SUPABASE_URL" \

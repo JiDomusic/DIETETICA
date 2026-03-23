@@ -1,3 +1,8 @@
+# Credenciales - NUNCA commitear
+.env
+*.env
+.env.*
+
 # Miscellaneous
 *.class
 *.log

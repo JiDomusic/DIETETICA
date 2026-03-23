@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/supabase_service.dart';
 import 'admin_dashboard_screen.dart';
 
@@ -16,23 +15,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   final _passCtrl = TextEditingController();
   bool _loading = false;
   bool _obscure = true;
-  bool _remember = false;
   String? _error;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedEmail();
-  }
-
-  Future<void> _loadSavedEmail() async {
-    final prefs = await SharedPreferences.getInstance();
-    final saved = prefs.getString('admin_email');
-    if (saved != null && saved.isNotEmpty) {
-      _emailCtrl.text = saved;
-      setState(() => _remember = true);
-    }
-  }
 
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
@@ -47,14 +30,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
         await SupabaseService.instance.signOut();
         setState(() { _error = 'No tenés permisos de administrador'; _loading = false; });
         return;
-      }
-
-      // Guardar email si corresponde
-      final prefs = await SharedPreferences.getInstance();
-      if (_remember) {
-        await prefs.setString('admin_email', _emailCtrl.text.trim());
-      } else {
-        await prefs.remove('admin_email');
       }
 
       if (!mounted) return;
@@ -161,16 +136,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       ),
                       const SizedBox(height: 12),
 
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: _remember,
-                            onChanged: (v) => setState(() => _remember = v ?? false),
-                            activeColor: const Color(0xFF2E7D32),
-                          ),
-                          const Text('Recordar email', style: TextStyle(fontSize: 13)),
-                        ],
-                      ),
                       const SizedBox(height: 20),
 
                       SizedBox(

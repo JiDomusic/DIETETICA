@@ -21,10 +21,9 @@ bash build_prod.sh
 ```
 
 ## Supabase
-- URL: inyectada via dart-define
+- URL: inyectada via dart-define (ver .env)
 - Auth: Supabase Auth (email/password)
-- Admin principal: programacionjjj@gmail.com
-- UUID admin: fc1bccf6-8618-44ca-a7b7-b54418fe6111
+- Admin: configurado en Supabase Auth + tabla admin_roles
 
 ## Firebase
 - Proyecto: dietetica-centro
