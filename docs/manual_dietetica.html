@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manual de Uso - Dietética Centro</title>
+<style>
+  @page { margin: 2cm; size: A4; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a1a; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+  .cover { text-align: center; padding: 80px 0 60px 0; page-break-after: always; }
+  .cover h1 { font-size: 36px; color: #2E7D32; margin-bottom: 10px; }
+  .cover h2 { font-size: 22px; color: #555; font-weight: normal; margin-bottom: 40px; }
+  .cover .brand { font-size: 14px; color: #888; margin-top: 60px; }
+  .cover .brand strong { color: #2E7D32; font-size: 16px; }
+  .cover .logo-circle { width: 100px; height: 100px; background: linear-gradient(135deg, #2E7D32, #66BB6A); border-radius: 50%; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; font-size: 48px; color: white; }
+  .cover .contact { margin-top: 30px; font-size: 13px; color: #666; }
+  h1 { color: #2E7D32; font-size: 24px; border-bottom: 3px solid #2E7D32; padding-bottom: 8px; margin-top: 40px; }
+  h2 { color: #1B5E20; font-size: 18px; margin-top: 30px; }
+  h3 { color: #333; font-size: 15px; margin-top: 20px; }
+  .step { background: #f0f8f0; border-left: 4px solid #2E7D32; padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+  .step strong { color: #2E7D32; }
+  .warning { background: #fff3e0; border-left: 4px solid #FF8F00; padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+  .warning strong { color: #FF8F00; }
+  .tip { background: #e3f2fd; border-left: 4px solid #1565C0; padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+  .tip strong { color: #1565C0; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th { background: #2E7D32; color: white; padding: 10px 12px; text-align: left; font-size: 13px; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; font-size: 13px; }
+  tr:nth-child(even) { background: #f5f5f5; }
+  .section-break { page-break-before: always; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  .footer { text-align: center; margin-top: 60px; padding-top: 20px; border-top: 2px solid #e0e0e0; font-size: 12px; color: #888; }
+  .toc { background: #fafafa; padding: 20px 30px; border-radius: 12px; border: 1px solid #e0e0e0; }
+  .toc a { color: #2E7D32; text-decoration: none; }
+  .toc li { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="logo-circle">&#127807;</div>
+  <h1>Dietética Centro</h1>
+  <h2>Manual de Uso del Sitio Web</h2>
+  <p style="font-size:16px; color:#666;">Guía completa para administrar tu tienda online</p>
+  <div class="contact">
+    <p><strong>Versión 1.0</strong> — Marzo 2026</p>
+  </div>
+  <div class="brand">
+    <br><br>
+    <strong>Programación JJ</strong><br>
+    Desarrollo de software a medida<br>
+    WhatsApp: 3413363551<br>
+    Industria Nacional 🇦🇷
+  </div>
+</div>
+
+<!-- ÍNDICE -->
+<h1>Índice</h1>
+<div class="toc">
+<ol>
+  <li><a href="#intro">Introducción</a></li>
+  <li><a href="#acceso">Cómo acceder al panel de administración</a></li>
+  <li><a href="#home">Editar el Home (lo que ve el público)</a></li>
+  <li><a href="#productos">Gestión de Productos</a></li>
+  <li><a href="#stock">Control de Stock (3 sucursales)</a></li>
+  <li><a href="#promos">Crear Promociones</a></li>
+  <li><a href="#galeria">Galería de Fotos</a></li>
+  <li><a href="#videos">Sección de Videos</a></li>
+  <li><a href="#sucursales">Administrar Sucursales</a></li>
+  <li><a href="#reservas">Gestión de Reservas</a></li>
+  <li><a href="#analytics">Analytics (Estadísticas)</a></li>
+  <li><a href="#config">Configuración General</a></li>
+  <li><a href="#admins">Administrar Co-Admins</a></li>
+  <li><a href="#imagenes">Subir Imágenes</a></li>
+  <li><a href="#whatsapp">Botón de WhatsApp</a></li>
+  <li><a href="#reserva-publica">Cómo funciona la reserva para el cliente</a></li>
+  <li><a href="#soporte">Soporte</a></li>
+</ol>
+</div>
+
+<!-- 1. INTRODUCCIÓN -->
+<h1 id="intro" class="section-break">1. Introducción</h1>
+<p>Tu sitio web <strong>Dietética Centro</strong> es una tienda online 100% editable. Todo lo que ves en la web pública lo podés cambiar desde el <strong>Panel de Administración</strong> sin necesidad de saber programar.</p>
+
+<p>Desde el panel podés:</p>
+<ul>
+  <li>Cambiar textos, fotos, colores y secciones del Home</li>
+  <li>Agregar, editar y eliminar productos con fotos y precios</li>
+  <li>Controlar el stock de las 3 sucursales en tiempo real</li>
+  <li>Crear promociones con descuentos</li>
+  <li>Subir fotos a la galería y agregar videos</li>
+  <li>Gestionar reservas de productos con pago por CBU</li>
+  <li>Ver estadísticas de productos más vistos y más vendidos</li>
+  <li>Configurar WhatsApp, redes sociales, horarios y más</li>
+</ul>
+
+<div class="tip">
+  <strong>Importante:</strong> La web se actualiza en tiempo real. Cuando guardás un cambio desde el admin, el público lo ve inmediatamente.
+</div>
+
+<!-- 2. ACCESO AL ADMIN -->
+<h1 id="acceso" class="section-break">2. Cómo acceder al panel de administración</h1>
+
+<div class="step">
+  <strong>Paso 1:</strong> Entrá a tu sitio web: <strong>https://dietetica-centro.web.app/</strong>
+</div>
+<div class="step">
+  <strong>Paso 2:</strong> Hacé clic en el ícono de <strong>engranaje/admin</strong> (arriba a la derecha, en la barra de navegación).
+</div>
+<div class="step">
+  <strong>Paso 3:</strong> Ingresá tu email y contraseña de administrador.
+</div>
+<div class="step">
+  <strong>Paso 4:</strong> Si los datos son correctos, entrás al <strong>Panel de Administración</strong> con 10 pestañas.
+</div>
+
+<div class="warning">
+  <strong>Seguridad:</strong> Solo las cuentas registradas como admin pueden acceder. Si alguien intenta entrar sin permiso, el sistema lo rechaza. Máximo 3 administradores permitidos.
+</div>
+
+<p>Podés tildar <strong>"Recordar email"</strong> para no tener que escribirlo cada vez.</p>
+
+<!-- 3. EDITAR EL HOME -->
+<h1 id="home" class="section-break">3. Editar el Home</h1>
+<p>El Home es lo primero que ve el público. Está compuesto por <strong>secciones editables</strong>. Cada sección tiene un tipo de diseño diferente.</p>
+
+<h2>3.1 Secciones</h2>
+<p>Desde la pestaña <strong>Home</strong> del admin, podés:</p>
+<ul>
+  <li><strong>Agregar</strong> nuevas secciones (botón + verde)</li>
+  <li><strong>Editar</strong> título, subtítulo, tipo de layout y posición</li>
+  <li><strong>Ocultar/Mostrar</strong> secciones sin eliminarlas</li>
+  <li><strong>Eliminar</strong> secciones que ya no necesités</li>
+  <li><strong>Reordenar</strong> cambiando el número de posición</li>
+</ul>
+
+<h3>Tipos de layout disponibles:</h3>
+<table>
+  <tr><th>Layout</th><th>Qué muestra</th></tr>
+  <tr><td>Banner</td><td>Imagen grande con título, como portada</td></tr>
+  <tr><td>Carrusel</td><td>Productos que se desplazan horizontal, como Netflix</td></tr>
+  <tr><td>Netflix</td><td>Productos agrupados por categoría, filas horizontales</td></tr>
+  <tr><td>Grilla</td><td>Tarjetas en cuadrícula (ideal para categorías)</td></tr>
+  <tr><td>Sucursales</td><td>Las 3 direcciones con mapa, teléfono y WhatsApp</td></tr>
+  <tr><td>Custom</td><td>Secciones especiales como la de reservas</td></tr>
+</table>
+
+<h2>3.2 Banners del Carrusel Principal</h2>
+<p>Son las imágenes grandes que rotan automáticamente arriba del Home. Podés:</p>
+<ul>
+  <li>Subir imagen JPG/PNG</li>
+  <li>Poner título y subtítulo (aparecen sobre la foto)</li>
+  <li>Ordenarlos por posición</li>
+  <li>Activar/desactivar sin eliminar</li>
+</ul>
+
+<h2>3.3 Banners Opcionales</h2>
+<p>Son banners temporales. Ideal para anuncios como "Cerrado por feriado" o "Liquidación esta semana". Podés programar fechas de inicio y fin.</p>
+
+<h2>3.4 Barra de Navegación</h2>
+<p>Son los botones del menú superior (Inicio, Promos, Productos, etc.). Podés agregar, quitar, renombrar y reordenar los links. Cada uno apunta a una sección del Home.</p>
+
+<!-- 4. PRODUCTOS -->
+<h1 id="productos" class="section-break">4. Gestión de Productos</h1>
+<p>Pestaña <strong>Productos</strong> del admin.</p>
+
+<h2>4.1 Crear un producto</h2>
+<div class="step">
+  <strong>Paso 1:</strong> Clic en <strong>"Nuevo Producto"</strong>
+</div>
+<div class="step">
+  <strong>Paso 2:</strong> Completá los datos:
+  <ul>
+    <li><strong>Nombre:</strong> Ej: "Almendras Tostadas 500g"</li>
+    <li><strong>SKU:</strong> Código único, ej: "FS-001" (no se repite)</li>
+    <li><strong>Descripción:</strong> Texto que ve el cliente</li>
+    <li><strong>Precio:</strong> En pesos argentinos</li>
+    <li><strong>Categoría:</strong> Frutos secos, cereales, etc.</li>
+    <li><strong>Imagen:</strong> Subí una foto JPG o PNG (máx 5MB)</li>
+  </ul>
+</div>
+<div class="step">
+  <strong>Paso 3:</strong> Marcá las opciones:
+  <ul>
+    <li><strong>Activo:</strong> Si está visible para el público</li>
+    <li><strong>En promoción:</strong> Aparece con badge "PROMO"</li>
+    <li><strong>Producto nuevo:</strong> Aparece con badge "NUEVO"</li>
+    <li><strong>Destacado:</strong> Aparece en la sección de más vendidos</li>
+  </ul>
+</div>
+<div class="step">
+  <strong>Paso 4:</strong> Clic en <strong>"Guardar"</strong>. Verás un aviso verde de éxito.
+</div>
+
+<h2>4.2 Editar un producto</h2>
+<p>Clic en el ícono de <strong>lápiz</strong> del producto. Se abre el mismo formulario con los datos cargados. Modificá lo que necesites y guardá.</p>
+
+<h2>4.3 Eliminar un producto</h2>
+<p>Clic en el ícono <strong>rojo de basura</strong>. Te pide confirmación. Al eliminar un producto también se elimina su stock.</p>
+
+<h2>4.4 Filtrar por categoría</h2>
+<p>Usá el desplegable <strong>"Categoría"</strong> en la parte superior para ver solo los productos de una categoría.</p>
+
+<!-- 5. STOCK -->
+<h1 id="stock" class="section-break">5. Control de Stock</h1>
+<p>Pestaña <strong>Stock</strong> del admin. Acá controlás cuántas unidades hay de cada producto <strong>en cada sucursal</strong>.</p>
+
+<h2>5.1 Ver stock</h2>
+<p>Cada fila muestra: producto, sucursal, cantidad actual y stock mínimo. Si la cantidad es menor al mínimo, aparece en <strong style="color:red;">rojo con alerta</strong>.</p>
+
+<h2>5.2 Ajustar stock rápido</h2>
+<ul>
+  <li><strong>Botón +</strong> (verde): suma 1 unidad</li>
+  <li><strong>Botón -</strong> (naranja): resta 1 unidad</li>
+  <li><strong>Botón lápiz:</strong> poné la cantidad exacta que querés</li>
+</ul>
+
+<h2>5.3 Cargar stock nuevo</h2>
+<div class="step">
+  <strong>Paso 1:</strong> Clic en <strong>"Cargar Stock"</strong>
+</div>
+<div class="step">
+  <strong>Paso 2:</strong> Elegí producto, sucursal, cantidad y stock mínimo (para alertas)
+</div>
+<div class="step">
+  <strong>Paso 3:</strong> Guardar. El stock queda registrado.
+</div>
+
+<h2>5.4 Historial de movimientos</h2>
+<p>Clic en <strong>"Ver Movimientos"</strong> para ver todo lo que entró y salió: ventas, devoluciones, ajustes manuales, reservas. Cada movimiento queda registrado con fecha y motivo.</p>
+
+<h2>5.5 Filtrar por sucursal</h2>
+<p>Usá el desplegable para ver solo el stock de una sucursal específica.</p>
+
+<div class="tip">
+  <strong>Las 3 sucursales comparten información:</strong> si un cliente pregunta por un producto en la sucursal 1, desde cualquier sucursal pueden ver si hay stock en las otras dos.
+</div>
+
+<!-- 6. PROMOS -->
+<h1 id="promos" class="section-break">6. Crear Promociones</h1>
+<p>Pestaña <strong>Promos</strong> del admin.</p>
+
+<div class="step">
+  <strong>Paso 1:</strong> Clic en <strong>"Nueva Promo"</strong>
+</div>
+<div class="step">
+  <strong>Paso 2:</strong> Elegí el producto, ponele título a la promo (ej: "2x1 en almendras"), texto promocional, descuento en % y/o precio promo.
+</div>
+<div class="step">
+  <strong>Paso 3:</strong> Activala y guardá. Aparece automáticamente en el carrusel de promos del Home.
+</div>
+
+<p>Podés desactivar una promo sin eliminarla para usarla de nuevo después.</p>
+
+<!-- 7. GALERÍA -->
+<h1 id="galeria" class="section-break">7. Galería de Fotos</h1>
+<p>Pestaña <strong>Galería</strong> del admin. Subí fotos de tus locales, productos, equipo, etc.</p>
+
+<div class="step">
+  <strong>Paso 1:</strong> Clic en <strong>"Agregar"</strong>
+</div>
+<div class="step">
+  <strong>Paso 2:</strong> Subí la imagen (JPG/PNG, máx 5MB), ponele título y descripción
+</div>
+<div class="step">
+  <strong>Paso 3:</strong> Guardar. Aparece en el carrusel de galería del Home.
+</div>
+
+<p>Podés editar título/descripción o eliminar fotos en cualquier momento.</p>
+
+<!-- 8. VIDEOS -->
+<h1 id="videos" class="section-break">8. Sección de Videos</h1>
+<p>Pestaña <strong>Videos</strong> del admin. Acá NO subís el video, solo pegás la <strong>URL</strong> (de YouTube u otra plataforma).</p>
+
+<div class="step">
+  <strong>Paso 1:</strong> Clic en <strong>"Agregar Video"</strong>
+</div>
+<div class="step">
+  <strong>Paso 2:</strong> Poné título, URL del video, descripción y opcionalmente una miniatura (imagen JPG/PNG)
+</div>
+<div class="step">
+  <strong>Paso 3:</strong> Guardar. El video aparece en la sección de videos del Home.
+</div>
+
+<p>Cuando el cliente hace clic, se abre el video en YouTube (o la plataforma que sea).</p>
+
+<!-- 9. SUCURSALES -->
+<h1 id="sucursales" class="section-break">9. Administrar Sucursales</h1>
+<p>Pestaña <strong>Sucursales</strong> del admin.</p>
+
+<h2>9.1 Agregar una sucursal</h2>
+<div class="step">
+  <strong>Paso 1:</strong> Clic en <strong>"Nueva Sucursal"</strong>
+</div>
+<div class="step">
+  <strong>Paso 2:</strong> Completá:
+  <ul>
+    <li><strong>Nombre:</strong> Ej: "Sucursal Centro"</li>
+    <li><strong>Dirección completa:</strong> Se usa para generar el link a Google Maps automáticamente</li>
+    <li><strong>Teléfono:</strong> Número fijo o celular</li>
+    <li><strong>WhatsApp:</strong> Con código de país (ej: 5493411234567)</li>
+    <li><strong>Horario:</strong> Ej: "Lunes a Sábado 9:00 - 20:00"</li>
+    <li><strong>URL de Google Maps:</strong> Opcional. Si no lo ponés, se genera desde la dirección</li>
+    <li><strong>Imagen:</strong> Foto del local</li>
+  </ul>
+</div>
+<div class="step">
+  <strong>Paso 3:</strong> Guardar. La sucursal aparece en el Home con toda la info y link a Maps.
+</div>
+
+<p>Cada sucursal tiene su propio botón de <strong>WhatsApp</strong> en el Home.</p>
+
+<!-- 10. RESERVAS -->
+<h1 id="reservas" class="section-break">10. Gestión de Reservas</h1>
+<p>Pestaña <strong>Reservas</strong> del admin.</p>
+
+<p>Cuando un cliente reserva un producto desde el Home, la reserva llega acá. Podés:</p>
+
+<table>
+  <tr><th>Acción</th><th>Qué hace</th></tr>
+  <tr><td>Confirmar</td><td>Indica que revisaste la reserva y es válida</td></tr>
+  <tr><td>Marcar Pagada</td><td>El cliente ya transfirió por CBU</td></tr>
+  <tr><td>Marcar Retirada</td><td>El cliente ya pasó a buscar el producto</td></tr>
+  <tr><td>Cancelar</td><td>Cancela la reserva y devuelve el stock automáticamente</td></tr>
+</table>
+
+<h2>Flujo de una reserva:</h2>
+<p><strong>Pendiente</strong> → <strong>Confirmada</strong> → <strong>Pagada</strong> → <strong>Retirada</strong></p>
+
+<p>Podés filtrar por estado para ver solo las pendientes, pagadas, etc.</p>
+
+<!-- 11. ANALYTICS -->
+<h1 id="analytics" class="section-break">11. Analytics (Estadísticas)</h1>
+<p>Pestaña <strong>Analytics</strong> del admin.</p>
+
+<p>Acá ves:</p>
+<ul>
+  <li><strong>Alertas de stock bajo:</strong> productos que están por debajo del mínimo</li>
+  <li><strong>Productos más vistos:</strong> ranking de lo que más mira la gente</li>
+  <li><strong>Movimientos de stock:</strong> cuánto se vendió y devolvió por producto</li>
+</ul>
+
+<p>Podés filtrar por <strong>sucursal</strong> y por <strong>período</strong> (7, 30 o 90 días).</p>
+
+<!-- 12. CONFIGURACIÓN -->
+<h1 id="config" class="section-break">12. Configuración General</h1>
+<p>Pestaña <strong>Config</strong> del admin. Acá editás toda la identidad del sitio:</p>
+
+<table>
+  <tr><th>Campo</th><th>Para qué</th></tr>
+  <tr><td>Nombre del sitio</td><td>Aparece en la barra y el título de la pestaña</td></tr>
+  <tr><td>WhatsApp principal</td><td>Botón flotante de WhatsApp del Home</td></tr>
+  <tr><td>CBU</td><td>Número de CBU para que los clientes paguen reservas</td></tr>
+  <tr><td>Alias CBU</td><td>El alias (más fácil de compartir)</td></tr>
+  <tr><td>Color primario</td><td>Color principal del sitio (verde por defecto)</td></tr>
+  <tr><td>Color secundario</td><td>Color de acentos (naranja por defecto)</td></tr>
+  <tr><td>Texto del footer</td><td>Lo que dice abajo de todo</td></tr>
+  <tr><td>Meta descripción</td><td>Texto que aparece en Google cuando buscan tu tienda</td></tr>
+  <tr><td>Instagram / Facebook</td><td>Links a tus redes sociales</td></tr>
+  <tr><td>Email de contacto</td><td>Aparece en el footer</td></tr>
+  <tr><td>Horario de atención</td><td>Aparece en el footer</td></tr>
+</table>
+
+<div class="step">
+  <strong>Importante:</strong> Después de modificar los campos, hacé clic en <strong>"Guardar Configuración"</strong>. Verás un aviso verde de éxito.
+</div>
+
+<h2>Logo del sitio</h2>
+<p>Más abajo en la misma pestaña, podés subir tu <strong>logo en JPG o PNG</strong>.</p>
+
+<!-- 13. CO-ADMINS -->
+<h1 id="admins" class="section-break">13. Administrar Co-Admins</h1>
+<p>En la pestaña <strong>Config</strong>, sección "Administradores".</p>
+
+<p>Podés tener hasta <strong>3 administradores</strong> en total (vos + 2 más). Los co-admins tienen los mismos permisos que vos: pueden editar todo.</p>
+
+<div class="warning">
+  <strong>Cuidado:</strong> No te podés eliminar a vos mismo como admin. Solo podés quitar a los demás.
+</div>
+
+<!-- 14. IMÁGENES -->
+<h1 id="imagenes" class="section-break">14. Subir Imágenes</h1>
+<p>En todos los formularios donde dice "Imagen", el proceso es el mismo:</p>
+
+<div class="step">
+  <strong>Paso 1:</strong> Clic en <strong>"Subir imagen"</strong>
+</div>
+<div class="step">
+  <strong>Paso 2:</strong> Elegí un archivo <strong>JPG o PNG</strong> de tu computadora (máximo 5MB)
+</div>
+<div class="step">
+  <strong>Paso 3:</strong> Esperá que suba (verás "Subiendo..."). Cuando termine, aparece la vista previa.
+</div>
+<div class="step">
+  <strong>Paso 4:</strong> Si querés cambiarla, clic en <strong>"Cambiar imagen"</strong>. Para quitar, clic en la <strong>X roja</strong>.
+</div>
+
+<div class="warning">
+  <strong>Solo se aceptan archivos JPG y PNG.</strong> No se permiten otros formatos. Si la imagen es muy grande, reducila antes de subirla.
+</div>
+
+<!-- 15. WHATSAPP -->
+<h1 id="whatsapp">15. Botón de WhatsApp</h1>
+<p>El botón verde flotante de WhatsApp aparece en toda la web. Se configura en <strong>Config → WhatsApp principal</strong>.</p>
+
+<p>Además, cada sucursal puede tener su propio número de WhatsApp. Cuando el cliente hace clic, se abre WhatsApp con un chat directo al número configurado.</p>
+
+<p>El formato del número debe ser con código de país, sin espacios ni guiones. Ejemplo: <strong>5493411234567</strong></p>
+
+<!-- 16. RESERVA PÚBLICA -->
+<h1 id="reserva-publica" class="section-break">16. Cómo funciona la reserva para el cliente</h1>
+<p>En el Home hay una sección <strong>"Reservá tu Producto"</strong>. Así funciona:</p>
+
+<div class="step">
+  <strong>1.</strong> El cliente elige producto y sucursal
+</div>
+<div class="step">
+  <strong>2.</strong> Pone cantidad, nombre, teléfono y opcionalmente email
+</div>
+<div class="step">
+  <strong>3.</strong> Ve los datos de CBU/Alias para hacer la transferencia
+</div>
+<div class="step">
+  <strong>4.</strong> Opcionalmente pone el número de comprobante
+</div>
+<div class="step">
+  <strong>5.</strong> Confirma la reserva → el stock se descuenta automáticamente
+</div>
+<div class="step">
+  <strong>6.</strong> Aparece un botón para enviar WhatsApp confirmando la reserva
+</div>
+
+<p>Vos ves la reserva en la pestaña <strong>Reservas</strong> del admin y la gestionás desde ahí.</p>
+
+<!-- 17. SOPORTE -->
+<h1 id="soporte" class="section-break">17. Soporte</h1>
+
+<p>Si tenés algún problema o querés agregar funcionalidades, contactá a:</p>
+
+<div class="step" style="text-align:center;">
+  <strong style="font-size:18px;">Programación JJ</strong><br><br>
+  WhatsApp: <strong>3413363551</strong><br>
+  Email: <strong>programacionjjj@gmail.com</strong><br><br>
+  <em>Desarrollo de software a medida</em><br>
+  <em>Industria Nacional 🇦🇷</em>
+</div>
+
+<div class="footer">
+  <p>Manual de Uso — Dietética Centro v1.0 — Marzo 2026</p>
+  <p>Desarrollado por <strong>Programación JJ</strong></p>
+</div>
+
+</body>
+</html>

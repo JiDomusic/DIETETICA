@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dietética Centro - Alimentos saludables, productos naturales y dietéticos">
+  <meta name="theme-color" content="#2E7D32">
+
+  <!-- iOS meta tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dietética Centro">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>Dietética Centro</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Preconnect para performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <style>
+    body { margin: 0; background-color: #0a0e14; }
+    .loading-screen {
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; background: #0a0e14;
+      font-family: 'Segoe UI', sans-serif; color: #2E7D32;
+      font-size: 1.2rem;
+    }
+    .loading-screen::after {
+      content: '🌿 Cargando...';
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-screen" id="loading"></div>
+
+  <!-- Firebase SDK - solo analytics en producción -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHJNkNoELPeuEUFl5xlP7qNevi22upKH8",
+      authDomain: "dietetica-centro.firebaseapp.com",
+      projectId: "dietetica-centro",
+      storageBucket: "dietetica-centro.firebasestorage.app",
+      messagingSenderId: "462686513020",
+      appId: "1:462686513020:web:875fc574ef4e8af25ea6f9",
+      measurementId: "G-TV3RKZQD2T"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    isSupported().then((supported) => {
+      if (supported) getAnalytics(app);
+    });
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
