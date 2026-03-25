@@ -103,76 +103,107 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          // ========== APP BAR / NAVBAR ==========
-          SliverAppBar(
-            floating: true,
-            snap: true,
-            expandedHeight: _isMobile ? 56 : 64,
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.transparent,
-            elevation: 1,
-            shadowColor: Colors.black12,
-            title: Row(
-              children: [
-                _buildLogo(_config['logo_path'] ?? ''),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(siteName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: _primary),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const Spacer(),
-                if (!_isMobile) ..._buildNavLinks(),
-                SizedBox(
-                  width: _isMobile ? 120 : 200,
-                  height: 36,
-                  child: TextField(
-                    onChanged: (v) => setState(() => _searchQuery = v),
-                    decoration: InputDecoration(
-                      hintText: 'Buscar...',
-                      prefixIcon: const Icon(Icons.search, size: 18),
-                      contentPadding: EdgeInsets.zero,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-                      ),
-                      filled: true,
-                      fillColor: const Color(0xFFF5F5F5),
-                    ),
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: Icon(Icons.admin_panel_settings, size: 20, color: Colors.grey[600]),
-                  tooltip: 'Admin',
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const AdminLoginScreen()),
-                  ),
-                ),
-              ],
-            ),
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              _primary.withValues(alpha: 0.05),
+              Colors.white,
+            ],
           ),
+        ),
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            // ========== APP BAR / NAVBAR ==========
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              expandedHeight: _isMobile ? 66 : 78,
+              backgroundColor: Colors.white.withValues(alpha: 0.94),
+              surfaceTintColor: Colors.transparent,
+              elevation: 8,
+              shadowColor: Colors.black.withValues(alpha: 0.08),
+              titleSpacing: 12,
+              title: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12, offset: const Offset(0, 4)),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    _buildLogo(_config['logo_path'] ?? ''),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(siteName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _primary), overflow: TextOverflow.ellipsis),
+                        const SizedBox(height: 2),
+                        const Text('Nutrición, reservas y envíos', style: TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                      ],
+                    ),
+                    const Spacer(),
+                    if (!_isMobile) ..._buildNavLinks(),
+                    SizedBox(
+                      width: _isMobile ? 120 : 220,
+                      height: 40,
+                      child: TextField(
+                        onChanged: (v) => setState(() => _searchQuery = v),
+                        decoration: InputDecoration(
+                          hintText: 'Buscar productos o categorías',
+                          prefixIcon: const Icon(Icons.search, size: 18),
+                          contentPadding: EdgeInsets.zero,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: _primary.withValues(alpha: 0.16)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: _primary.withValues(alpha: 0.16)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: _primary, width: 1.4),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFFF8FAFC),
+                        ),
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: Icon(Icons.admin_panel_settings, size: 20, color: Colors.grey[600]),
+                      tooltip: 'Admin',
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const AdminLoginScreen()),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
-          // ========== BÚSQUEDA ==========
-          if (_searchQuery.isNotEmpty)
-            _buildSearchResults()
-          else ...[
-            for (final section in _sections)
-              _buildSection(section),
+            // ========== BÚSQUEDA ==========
+            if (_searchQuery.isNotEmpty)
+              _buildSearchResults()
+            else ...[
+              for (final section in _sections)
+                _buildSection(section),
+            ],
+
+            // Footer
+            SliverToBoxAdapter(child: _buildFooter()),
           ],
-
-          // Footer
-          SliverToBoxAdapter(child: _buildFooter()),
-        ],
+        ),
       ),
       floatingActionButton: whatsapp.isNotEmpty
           ? WhatsAppFAB(phoneNumber: whatsapp)
