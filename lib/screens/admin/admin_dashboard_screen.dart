@@ -10,6 +10,7 @@ import 'tabs/locations_tab.dart';
 import 'tabs/reservations_tab.dart';
 import 'tabs/analytics_tab.dart';
 import 'tabs/config_tab.dart';
+import 'tabs/manual_tab.dart';
 import '../public/home_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
@@ -35,6 +36,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     Tab(icon: Icon(Icons.shopping_bag), text: 'Reservas'),
     Tab(icon: Icon(Icons.analytics), text: 'Analytics'),
     Tab(icon: Icon(Icons.settings), text: 'Config'),
+    Tab(icon: Icon(Icons.menu_book), text: 'Manual'),
   ];
 
   @override
@@ -61,9 +63,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
         title: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.eco, color: Color(0xFF66BB6A), size: 24),
+            Icon(Icons.eco, color: Color(0xFFF0A830), size: 24),
             SizedBox(width: 8),
-            Text('Admin - Dietética'),
+            Text('Admin - Cúrcuma'),
           ],
         ),
         actions: [
@@ -83,8 +85,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           controller: _tabCtrl,
           isScrollable: true,
           tabs: _tabs,
-          indicatorColor: const Color(0xFF66BB6A),
-          labelColor: const Color(0xFF66BB6A),
+          indicatorColor: const Color(0xFFF0A830),
+          labelColor: const Color(0xFFF0A830),
           unselectedLabelColor: const Color(0xFF8A9BAE),
           tabAlignment: TabAlignment.start,
         ),
@@ -102,6 +104,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           ReservationsTab(),
           AnalyticsTab(),
           ConfigTab(),
+          ManualTab(),
         ],
       ),
     );

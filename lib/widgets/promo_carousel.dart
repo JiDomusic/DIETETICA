@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
+import 'animated_section.dart';
 
 class PromoCarousel extends StatelessWidget {
   final List<Map<String, dynamic>> promos;
@@ -10,21 +11,20 @@ class PromoCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = ThemeConfig.instance.primary;
     final secondary = ThemeConfig.instance.secondary;
 
     if (promos.isEmpty) {
       return const Padding(
         padding: EdgeInsets.all(20),
-        child: Center(child: Text('Sin promociones por ahora', style: TextStyle(color: Color(0xFF888888)))),
+        child: Center(child: Text('Sin promociones por ahora', style: TextStyle(color: Color(0xFF999999)))),
       );
     }
 
     return SizedBox(
-      height: 300,
+      height: 360,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         itemCount: promos.length,
         itemBuilder: (context, i) {
           final promo = promos[i];
@@ -36,74 +36,113 @@ class PromoCarousel extends StatelessWidget {
           final originalPrice = product?['price'] as num?;
           final imgPath = product?['image_path'] as String? ?? '';
 
-          return Container(
-            width: 220,
-            margin: const EdgeInsets.only(right: 14),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: secondary.withValues(alpha: 0.5), width: 1.5),
-              boxShadow: [BoxShadow(color: secondary.withValues(alpha: 0.1), blurRadius: 8, offset: const Offset(0, 2))],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-                      child: imgPath.isNotEmpty
-                          ? Image.network(
-                              SupabaseService.instance.getPublicImageUrl(imgPath),
-                              height: 160, width: 220, fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(height: 160, width: 220, color: secondary.withValues(alpha: 0.08),
-                                child: Icon(Icons.local_offer, color: secondary, size: 40)),
-                            )
-                          : Container(height: 160, width: 220, color: secondary.withValues(alpha: 0.08),
-                              child: Icon(Icons.local_offer, color: secondary, size: 40)),
-                    ),
-                    if (discountPct != null && discountPct > 0)
-                      Positioned(
-                        top: 8, right: 8,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(color: secondary, borderRadius: BorderRadius.circular(10)),
-                          child: Text('-${discountPct.toStringAsFixed(0)}%',
-                            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.white)),
-                        ),
-                      ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12),
+          return AnimatedSection(
+            delayMs: i * 100,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: HoverScaleCard(
+                borderRadius: BorderRadius.circular(4),
+                child: SizedBox(
+                  width: 230,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A)), maxLines: 1, overflow: TextOverflow.ellipsis),
-                      if (promoText.isNotEmpty) ...[
-                        const SizedBox(height: 3),
-                        Text(promoText, style: TextStyle(fontSize: 11, color: secondary), maxLines: 2, overflow: TextOverflow.ellipsis),
-                      ],
-                      const SizedBox(height: 8),
-                      Row(
+                      // Imagen con badge minimalista
+                      Stack(
                         children: [
-                          if (originalPrice != null && promoPrice != null) ...[
-                            Text('\$ ${originalPrice.toStringAsFixed(2)}',
-                              style: const TextStyle(fontSize: 12, color: Color(0xFFAAAAAA), decoration: TextDecoration.lineThrough)),
-                            const SizedBox(width: 8),
-                          ],
-                          Text('\$ ${(promoPrice ?? originalPrice ?? 0).toStringAsFixed(2)}',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: primary)),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              color: const Color(0xFFF5F5F5),
+                              child: imgPath.isNotEmpty
+                                  ? Image.network(
+                                      SupabaseService.instance.getPublicImageUrl(imgPath),
+                                      height: 240, width: 230, fit: BoxFit.cover,
+                                      errorBuilder: (_, __, ___) => Container(
+                                        height: 240, width: 230,
+                                        color: const Color(0xFFF5F5F5),
+                                        child: Icon(Icons.local_offer, color: Colors.grey[300], size: 36),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 240, width: 230,
+                                      color: const Color(0xFFF5F5F5),
+                                      child: Icon(Icons.local_offer, color: Colors.grey[300], size: 36),
+                                    ),
+                            ),
+                          ),
+                          if (discountPct != null && discountPct > 0)
+                            Positioned(
+                              top: 10, left: 10,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                color: secondary,
+                                child: Text(
+                                  '-${discountPct.toStringAsFixed(0)}%',
+                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Colors.white),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
+                      const SizedBox(height: 12),
+                      // Nombre
+                      Text(
+                        title,
+                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A)),
+                        maxLines: 1, overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      // Precios
+                      Row(
+                        children: [
+                          Text(
+                            '\$ ${_formatPrice(promoPrice ?? originalPrice ?? 0)}',
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF333333)),
+                          ),
+                          if (originalPrice != null && promoPrice != null) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              '\$ ${_formatPrice(originalPrice)}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFFBBBBBB),
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Color(0xFFBBBBBB),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      if (promoText.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          promoText,
+                          style: const TextStyle(fontSize: 12, color: Color(0xFF999999)),
+                          maxLines: 2, overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           );
         },
       ),
     );
+  }
+
+  String _formatPrice(num price) {
+    if (price >= 1000) {
+      final formatted = price.toStringAsFixed(0);
+      final buffer = StringBuffer();
+      for (int i = 0; i < formatted.length; i++) {
+        if (i > 0 && (formatted.length - i) % 3 == 0) buffer.write('.');
+        buffer.write(formatted[i]);
+      }
+      return buffer.toString();
+    }
+    return price.toStringAsFixed(0);
   }
 }

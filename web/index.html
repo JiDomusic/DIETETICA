@@ -5,17 +5,18 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dietética Centro - Alimentos saludables, productos naturales y dietéticos">
-  <meta name="theme-color" content="#2E7D32">
+  <meta name="description" content="Cúrcuma - Dietética natural, productos saludables y orgánicos">
+  <meta name="theme-color" content="#F0A830">
 
   <!-- iOS meta tags -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Dietética Centro">
+  <meta name="apple-mobile-web-app-title" content="Cúrcuma">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
   <link rel="icon" type="image/png" href="favicon.png"/>
-  <title>Dietética Centro</title>
+  <title>Cúrcuma</title>
   <link rel="manifest" href="manifest.json">
 
   <!-- Preconnect para performance -->
@@ -23,16 +24,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <style>
-    body { margin: 0; background-color: #0a0e14; }
+    body { margin: 0; background-color: #1A1A2E; }
     .loading-screen {
-      display: flex; justify-content: center; align-items: center;
-      height: 100vh; background: #0a0e14;
-      font-family: 'Segoe UI', sans-serif; color: #2E7D32;
-      font-size: 1.2rem;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      height: 100vh; background: #1A1A2E;
+      font-family: 'Inter', 'Segoe UI', sans-serif; color: #F0A830;
+      font-size: 1.1rem;
+    }
+    .loading-screen::before {
+      content: '';
+      width: 80px; height: 80px; border-radius: 50%;
+      background: #F0A830;
+      margin-bottom: 20px;
+      animation: pulse 1.5s infinite;
     }
     .loading-screen::after {
-      content: '🌿 Cargando...';
-      animation: pulse 1.5s infinite;
+      content: 'Cúrcuma';
+      font-weight: 700; font-size: 1.4rem; letter-spacing: 1px;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; }

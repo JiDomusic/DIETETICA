@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen>
                       _buildLogoCircle(primary, accent, hasLogo),
                       const SizedBox(height: 32),
                       Text(
-                        'Dietética Centro',
+                        'Cúrcuma',
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: const Color(0xFF1A1A1A),
@@ -104,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Alimentos saludables',
+                        'Tienda Natural',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: primary,
                           letterSpacing: 2,

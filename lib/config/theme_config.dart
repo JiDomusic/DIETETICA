@@ -6,9 +6,9 @@ class ThemeConfig {
   static final ThemeConfig instance = ThemeConfig._();
   ThemeConfig._();
 
-  Color primary = const Color(0xFF2E7D32);
-  Color secondary = const Color(0xFFFF8F00);
-  Color accent = const Color(0xFF66BB6A);
+  Color primary = const Color(0xFFF0A830);   // Naranja cúrcuma
+  Color secondary = const Color(0xFF2D2D2D); // Gris oscuro/carbón
+  Color accent = const Color(0xFFF5C563);    // Dorado claro
 
   /// Callback para reconstruir el MaterialApp cuando cambian colores
   VoidCallback? onColorsChanged;

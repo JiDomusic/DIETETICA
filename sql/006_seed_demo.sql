@@ -1,6 +1,6 @@
 -- ============================================================
--- DATOS DEMO - Dietética Centro
--- CON IMÁGENES de picsum.photos (fotos gratuitas)
+-- DATOS DEMO - Cúrcuma - Tienda Natural
+-- CON IMÁGENES de Unsplash (fotos gratuitas)
 -- Todos los SKU comienzan con 'DEMO-' para fácil identificación
 -- ============================================================
 
@@ -164,8 +164,15 @@ UPDATE categories SET image_path = 'https://images.unsplash.com/photo-1509440159
 
 -- ===================== SITE CONFIG DEMO =====================
 UPDATE site_config SET value = '5493414567890' WHERE key = 'whatsapp_default' AND (value IS NULL OR value = '');
-UPDATE site_config SET value = 'info@dieteticacentro.com' WHERE key = 'email_contacto' AND (value IS NULL OR value = '');
-UPDATE site_config SET value = 'https://instagram.com/dieteticacentro' WHERE key = 'instagram_url' AND (value IS NULL OR value = '');
-UPDATE site_config SET value = 'https://facebook.com/dieteticacentro' WHERE key = 'facebook_url' AND (value IS NULL OR value = '');
+UPDATE site_config SET value = 'info@curcumatiendanatural.com' WHERE key = 'email_contacto' AND (value IS NULL OR value = '');
+UPDATE site_config SET value = 'https://instagram.com/curcuma.tiendanatural' WHERE key = 'instagram_url' AND (value IS NULL OR value = '');
+UPDATE site_config SET value = 'https://facebook.com/curcumatiendanatural' WHERE key = 'facebook_url' AND (value IS NULL OR value = '');
 UPDATE site_config SET value = '0000003100012345678901' WHERE key = 'cbu_info' AND (value IS NULL OR value = '');
-UPDATE site_config SET value = 'dietetica.centro' WHERE key = 'alias_cbu' AND (value IS NULL OR value = '');
+UPDATE site_config SET value = 'curcuma.tienda' WHERE key = 'alias_cbu' AND (value IS NULL OR value = '');
+
+-- Colores de marca Cúrcuma
+INSERT INTO site_config (key, value) VALUES ('color_primary', '#F0A830') ON CONFLICT (key) DO UPDATE SET value = '#F0A830';
+INSERT INTO site_config (key, value) VALUES ('color_secondary', '#2D2D2D') ON CONFLICT (key) DO UPDATE SET value = '#2D2D2D';
+INSERT INTO site_config (key, value) VALUES ('color_accent', '#F5C563') ON CONFLICT (key) DO UPDATE SET value = '#F5C563';
+INSERT INTO site_config (key, value) VALUES ('site_name', 'Cúrcuma') ON CONFLICT (key) DO UPDATE SET value = 'Cúrcuma';
+INSERT INTO site_config (key, value) VALUES ('footer_text', '© 2026 Cúrcuma - Tienda Natural') ON CONFLICT (key) DO UPDATE SET value = '© 2026 Cúrcuma - Tienda Natural';

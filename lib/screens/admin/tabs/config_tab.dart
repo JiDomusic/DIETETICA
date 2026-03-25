@@ -28,7 +28,7 @@ class _ConfigTabState extends State<ConfigTab> {
 
   // Campos de texto (sin los colores, que ahora son pickers)
   static const _textFields = [
-    ('site_name', 'Nombre del sitio', 'Ej: Dietética Centro', Icons.store),
+    ('site_name', 'Nombre del sitio', 'Ej: Cúrcuma', Icons.store),
     ('whatsapp_default', 'WhatsApp principal (con cód. país)', '549341...', Icons.chat),
     ('cbu_info', 'CBU para pagos', 'Número CBU completo', Icons.account_balance),
     ('alias_cbu', 'Alias CBU', 'mi.alias.cbu', Icons.tag),

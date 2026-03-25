@@ -53,8 +53,8 @@ class _HeroBannerState extends State<HeroBanner> {
             children: [
               Icon(Icons.eco, size: 60, color: Colors.white),
               SizedBox(height: 12),
-              Text('Dietética Centro', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.white)),
-              Text('Alimentos saludables para tu bienestar', style: TextStyle(fontSize: 14, color: Colors.white70)),
+              Text('Cúrcuma', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.white)),
+              Text('Dietética natural para tu bienestar', style: TextStyle(fontSize: 14, color: Colors.white70)),
             ],
           ),
         ),

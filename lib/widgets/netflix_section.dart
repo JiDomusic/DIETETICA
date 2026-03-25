@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../config/theme_config.dart';
 import '../services/supabase_service.dart';
+import 'animated_section.dart';
 
 class NetflixSection extends StatelessWidget {
   final List<Map<String, dynamic>> products;
@@ -20,69 +21,103 @@ class NetflixSection extends StatelessWidget {
       grouped.putIfAbsent(catName, () => []).add(p);
     }
 
+    int sectionIndex = 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: grouped.entries.map((entry) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Text(entry.key, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: primary)),
-              ),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: entry.value.length,
-                  itemBuilder: (context, i) {
-                    final p = entry.value[i];
-                    final imgPath = p['image_path'] as String? ?? '';
-                    final name = p['name'] as String? ?? '';
-
-                    return Container(
-                      width: 140,
-                      margin: const EdgeInsets.only(right: 12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                        border: Border.all(color: const Color(0xFFE8E8E8)),
-                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)],
+        final delay = sectionIndex * 120;
+        sectionIndex++;
+        return AnimatedSection(
+          delayMs: delay,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: primary,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                            child: imgPath.isNotEmpty
-                                ? Image.network(
-                                    SupabaseService.instance.getPublicImageUrl(imgPath),
-                                    height: 150, width: 140, fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => Container(
-                                      height: 150, width: 140, color: primary.withValues(alpha: 0.08),
-                                      child: Icon(Icons.eco, color: primary),
-                                    ),
-                                  )
-                                : Container(
-                                    height: 150, width: 140, color: primary.withValues(alpha: 0.08),
-                                    child: Icon(Icons.eco, color: primary),
-                                  ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Color(0xFF1A1A1A)),
-                              maxLines: 2, overflow: TextOverflow.ellipsis),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                      const SizedBox(width: 10),
+                      Text(entry.key, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: primary)),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 220,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: entry.value.length,
+                    itemBuilder: (context, i) {
+                      final p = entry.value[i];
+                      final imgPath = p['image_path'] as String? ?? '';
+                      final name = p['name'] as String? ?? '';
+                      final price = p['price'] as num? ?? 0;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 14),
+                        child: HoverScaleCard(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            width: 155,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white,
+                              border: Border.all(color: const Color(0xFFF0F0F0)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                                  child: imgPath.isNotEmpty
+                                      ? Image.network(
+                                          SupabaseService.instance.getPublicImageUrl(imgPath),
+                                          height: 150, width: 155, fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) => Container(
+                                            height: 150, width: 155,
+                                            color: primary.withValues(alpha: 0.08),
+                                            child: Icon(Icons.eco, color: primary.withValues(alpha: 0.3)),
+                                          ),
+                                        )
+                                      : Container(
+                                          height: 150, width: 155,
+                                          color: primary.withValues(alpha: 0.08),
+                                          child: Icon(Icons.eco, color: primary.withValues(alpha: 0.3)),
+                                        ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF1A1A2E)),
+                                        maxLines: 2, overflow: TextOverflow.ellipsis),
+                                      const SizedBox(height: 4),
+                                      Text('\$ ${price.toStringAsFixed(0)}',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: primary)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }).toList(),

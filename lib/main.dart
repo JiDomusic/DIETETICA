@@ -35,7 +35,7 @@ class _DieteticaAppState extends State<DieteticaApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dietética Centro',
+      title: 'Cúrcuma',
       debugShowCheckedModeBanner: false,
       theme: _buildLightTheme(),
       home: const SplashScreen(),
@@ -69,13 +69,13 @@ class _DieteticaAppState extends State<DieteticaApp> {
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.poppins(
+        titleTextStyle: GoogleFonts.inter(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: const Color(0xFF1A1A1A),
         ),
       ),
-      textTheme: GoogleFonts.poppinsTextTheme(
+      textTheme: GoogleFonts.interTextTheme(
         ThemeData.light().textTheme,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -84,7 +84,7 @@ class _DieteticaAppState extends State<DieteticaApp> {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15),
+          textStyle: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 15),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(

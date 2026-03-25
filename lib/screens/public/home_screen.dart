@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../config/theme_config.dart';
 import '../../services/supabase_service.dart';
+import '../../widgets/animated_section.dart';
 import '../../widgets/hero_banner.dart';
 import '../../widgets/product_carousel.dart';
 import '../../widgets/netflix_section.dart';
@@ -78,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _loading = false;
       });
 
-      // Actualizar colores dinámicos
       ThemeConfig.instance.loadFromConfig(_config);
     } catch (e) {
       if (mounted) setState(() => _loading = false);
@@ -86,124 +86,142 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool get _isMobile => MediaQuery.of(context).size.width < 768;
+  bool get _isTablet => MediaQuery.of(context).size.width >= 768 && MediaQuery.of(context).size.width < 1200;
 
   Color get _primary => ThemeConfig.instance.primary;
   Color get _accent => ThemeConfig.instance.accent;
+  Color get _secondary => ThemeConfig.instance.secondary;
 
   @override
   Widget build(BuildContext context) {
     if (_loading) {
       return Scaffold(
-        body: Center(child: CircularProgressIndicator(color: _primary)),
-      );
-    }
-
-    final siteName = _config['site_name'] ?? 'Dietética Centro';
-    final whatsapp = _config['whatsapp_default'] ?? '';
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              _primary.withValues(alpha: 0.05),
-              Colors.white,
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: CircularProgressIndicator(
+                  color: _primary,
+                  strokeWidth: 3,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text('Cargando...', style: TextStyle(color: _primary.withValues(alpha: 0.6), fontWeight: FontWeight.w500)),
             ],
           ),
         ),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            // ========== APP BAR / NAVBAR ==========
-            SliverAppBar(
-              floating: true,
-              snap: true,
-              expandedHeight: _isMobile ? 66 : 78,
-              backgroundColor: Colors.white.withValues(alpha: 0.94),
-              surfaceTintColor: Colors.transparent,
-              elevation: 8,
-              shadowColor: Colors.black.withValues(alpha: 0.08),
-              titleSpacing: 12,
-              title: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      );
+    }
+
+    final siteName = _config['site_name'] ?? 'Cúrcuma';
+    final whatsapp = _config['whatsapp_default'] ?? '';
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFFAFBFC),
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          // ========== NAVBAR MODERNA ==========
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            expandedHeight: _isMobile ? 62 : 74,
+            backgroundColor: Colors.white.withValues(alpha: 0.96),
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            shadowColor: Colors.transparent,
+            titleSpacing: 0,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Container(
+                height: 1,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12, offset: const Offset(0, 4)),
-                  ],
+                  gradient: LinearGradient(
+                    colors: [_primary.withValues(alpha: 0.0), _primary.withValues(alpha: 0.15), _primary.withValues(alpha: 0.0)],
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    _buildLogo(_config['logo_path'] ?? ''),
-                    const SizedBox(width: 8),
+              ),
+            ),
+            title: Padding(
+              padding: EdgeInsets.symmetric(horizontal: _isMobile ? 12 : 24),
+              child: Row(
+                children: [
+                  // Logo + nombre
+                  _buildLogo(_config['logo_path'] ?? ''),
+                  const SizedBox(width: 10),
+                  if (!_isMobile)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(siteName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _primary), overflow: TextOverflow.ellipsis),
-                        const SizedBox(height: 2),
-                        const Text('Nutrición, reservas y envíos', style: TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                        Text(siteName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _primary)),
+                        Text('Alimentos naturales', style: TextStyle(fontSize: 11, color: _primary.withValues(alpha: 0.5), fontWeight: FontWeight.w500)),
                       ],
                     ),
-                    const Spacer(),
-                    if (!_isMobile) ..._buildNavLinks(),
-                    SizedBox(
-                      width: _isMobile ? 120 : 220,
-                      height: 40,
-                      child: TextField(
-                        onChanged: (v) => setState(() => _searchQuery = v),
-                        decoration: InputDecoration(
-                          hintText: 'Buscar productos o categorías',
-                          prefixIcon: const Icon(Icons.search, size: 18),
-                          contentPadding: EdgeInsets.zero,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: _primary.withValues(alpha: 0.16)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: _primary.withValues(alpha: 0.16)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: _primary, width: 1.4),
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFFF8FAFC),
+                  if (_isMobile)
+                    Flexible(
+                      child: Text(siteName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: _primary), overflow: TextOverflow.ellipsis),
+                    ),
+                  const Spacer(),
+                  // Nav links desktop
+                  if (!_isMobile && !_isTablet) ..._buildNavLinks(),
+                  // Search
+                  SizedBox(
+                    width: _isMobile ? 110 : 220,
+                    height: 38,
+                    child: TextField(
+                      onChanged: (v) => setState(() => _searchQuery = v),
+                      decoration: InputDecoration(
+                        hintText: _isMobile ? 'Buscar...' : 'Buscar productos...',
+                        hintStyle: TextStyle(color: Colors.grey[400], fontSize: 13),
+                        prefixIcon: Icon(Icons.search, size: 18, color: _primary.withValues(alpha: 0.5)),
+                        contentPadding: EdgeInsets.zero,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
                         ),
-                        style: const TextStyle(fontSize: 13),
+                        filled: true,
+                        fillColor: const Color(0xFFF3F4F6),
                       ),
+                      style: const TextStyle(fontSize: 13),
                     ),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: Icon(Icons.admin_panel_settings, size: 20, color: Colors.grey[600]),
-                      tooltip: 'Admin',
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const AdminLoginScreen()),
+                  ),
+                  const SizedBox(width: 6),
+                  IconButton(
+                    icon: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: _primary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                      child: Icon(Icons.admin_panel_settings, size: 18, color: _primary),
                     ),
-                  ],
-                ),
+                    tooltip: 'Admin',
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const AdminLoginScreen()),
+                    ),
+                  ),
+                ],
               ),
             ),
+          ),
 
-            // ========== BÚSQUEDA ==========
-            if (_searchQuery.isNotEmpty)
-              _buildSearchResults()
-            else ...[
-              for (final section in _sections)
-                _buildSection(section),
-            ],
-
-            // Footer
-            SliverToBoxAdapter(child: _buildFooter()),
+          // ========== CONTENIDO ==========
+          if (_searchQuery.isNotEmpty)
+            _buildSearchResults()
+          else ...[
+            for (int i = 0; i < _sections.length; i++)
+              _buildSection(_sections[i], i),
           ],
-        ),
+
+          // Footer
+          SliverToBoxAdapter(child: _buildFooter()),
+        ],
       ),
       floatingActionButton: whatsapp.isNotEmpty
           ? WhatsAppFAB(phoneNumber: whatsapp)
@@ -214,8 +232,13 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _buildNavLinks() {
     return _navItems.map((item) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 2),
         child: TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: _primary,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
           onPressed: () {
             final slug = item['section_slug'] as String?;
             if (slug != null) {
@@ -231,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Text(
             item['label'] as String? ?? '',
-            style: TextStyle(color: _primary, fontSize: 13, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
           ),
         ),
       );
@@ -240,16 +263,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildLogo(String path) {
     if (path.isEmpty) {
-      return Icon(Icons.eco, color: _primary, size: 28);
+      return Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [_primary, _accent],
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(Icons.eco, color: Colors.white, size: 22),
+      );
     }
     return ClipRRect(
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.circular(12),
       child: Image.network(
         _svc.getPublicImageUrl(path),
-        height: 32,
-        width: 32,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => Icon(Icons.eco, color: _primary, size: 28),
+        height: 38, width: 38, fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => Container(
+          width: 38, height: 38,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [_primary, _accent]),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(Icons.eco, color: Colors.white, size: 22),
+        ),
       ),
     );
   }
@@ -263,19 +303,33 @@ class _HomeScreenState extends State<HomeScreen> {
     }).toList();
 
     return SliverPadding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       sliver: SliverList(
         delegate: SliverChildListDelegate([
-          Text(
-            'Resultados para "${_searchQuery}" (${filtered.length})',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF1A1A1A)),
+          Row(
+            children: [
+              Icon(Icons.search, color: _primary, size: 22),
+              const SizedBox(width: 10),
+              Text(
+                '${filtered.length} resultados para "$_searchQuery"',
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF1A1A2E)),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           if (filtered.isEmpty)
-            const Center(
+            Center(
               child: Padding(
-                padding: EdgeInsets.all(40),
-                child: Text('No se encontraron productos', style: TextStyle(color: Color(0xFF888888))),
+                padding: const EdgeInsets.all(60),
+                child: Column(
+                  children: [
+                    Icon(Icons.search_off, size: 56, color: Colors.grey[300]),
+                    const SizedBox(height: 12),
+                    const Text('No encontramos eso', style: TextStyle(color: Color(0xFF888888), fontSize: 16)),
+                    const SizedBox(height: 4),
+                    const Text('Probá con otro término', style: TextStyle(color: Color(0xFFBBBBBB), fontSize: 13)),
+                  ],
+                ),
               ),
             )
           else
@@ -295,74 +349,57 @@ class _HomeScreenState extends State<HomeScreen> {
     final price = product['price'];
     final desc = product['description'] as String? ?? '';
     final isPromo = product['is_promo'] == true;
+    final isNew = product['is_new'] == true;
 
-    return Container(
-      width: _isMobile ? MediaQuery.of(context).size.width - 40 : 220,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isPromo ? _primary : const Color(0xFFE8E8E8)),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 2)),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: imgPath.isNotEmpty
-                ? Image.network(
-                    _svc.getPublicImageUrl(imgPath),
-                    height: 160,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      height: 160,
-                      color: const Color(0xFFF0F0F0),
-                      child: Icon(Icons.image, size: 40, color: Colors.grey[400]),
-                    ),
-                  )
-                : Container(
-                    height: 160,
-                    color: _primary.withValues(alpha: 0.08),
-                    child: Center(child: Icon(Icons.eco, size: 40, color: _primary)),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (isPromo)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    margin: const EdgeInsets.only(bottom: 6),
-                    decoration: BoxDecoration(
-                      color: _primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Text('PROMO', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white)),
-                  ),
-                Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A)), maxLines: 2, overflow: TextOverflow.ellipsis),
-                if (desc.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(desc, style: const TextStyle(fontSize: 12, color: Color(0xFF888888)), maxLines: 2, overflow: TextOverflow.ellipsis),
-                ],
-                const SizedBox(height: 8),
-                Text(
-                  '\$ ${(price as num?)?.toStringAsFixed(2) ?? '0.00'}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: _primary),
-                ),
-              ],
+    return HoverScaleCard(
+      borderRadius: BorderRadius.circular(4),
+      child: SizedBox(
+        width: _isMobile ? MediaQuery.of(context).size.width - 48 : 230,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Imagen limpia
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Container(
+                color: const Color(0xFFF5F5F5),
+                child: imgPath.isNotEmpty
+                    ? Image.network(
+                        _svc.getPublicImageUrl(imgPath),
+                        height: 200, width: double.infinity, fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          height: 200,
+                          color: const Color(0xFFF5F5F5),
+                          child: Icon(Icons.eco, size: 36, color: Colors.grey[300]),
+                        ),
+                      )
+                    : Container(
+                        height: 200,
+                        color: const Color(0xFFF5F5F5),
+                        child: Center(child: Icon(Icons.eco, size: 36, color: Colors.grey[300])),
+                      ),
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            // Info minimalista
+            Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A)),
+              maxLines: 2, overflow: TextOverflow.ellipsis),
+            const SizedBox(height: 4),
+            Text(
+              '\$ ${(price as num?)?.toStringAsFixed(0) ?? '0'}',
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF333333)),
+            ),
+            if (desc.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(desc, style: const TextStyle(fontSize: 12, color: Color(0xFF999999)), maxLines: 2, overflow: TextOverflow.ellipsis),
+            ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSection(Map<String, dynamic> section) {
+  Widget _buildSection(Map<String, dynamic> section, int index) {
     final slug = section['slug'] as String? ?? '';
     final title = section['title'] as String? ?? '';
     final subtitle = section['subtitle'] as String? ?? '';
@@ -397,35 +434,89 @@ class _HomeScreenState extends State<HomeScreen> {
         content = const SizedBox.shrink();
     }
 
+    // Fondo alternado para secciones
+    final isHero = layout == 'banner';
+    final isEven = index % 2 == 0;
+    final bgColor = isHero
+        ? Colors.transparent
+        : isEven
+            ? Colors.transparent
+            : _primary.withValues(alpha: 0.02);
+
+    // Icon para cada tipo de sección
+    IconData? sectionIcon;
+    switch (slug) {
+      case 'promos': sectionIcon = Icons.local_fire_department;
+      case 'nuevos': sectionIcon = Icons.fiber_new;
+      case 'categorias': sectionIcon = Icons.grid_view_rounded;
+      case 'destacados': sectionIcon = Icons.star_rounded;
+      case 'sucursales': sectionIcon = Icons.store;
+      case 'galeria': sectionIcon = Icons.photo_library;
+      case 'videos': sectionIcon = Icons.play_circle_filled;
+      case 'reservas': sectionIcon = Icons.shopping_bag;
+    }
+
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (showTitle && title.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: _primary)),
-                    if (subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(subtitle, style: const TextStyle(fontSize: 14, color: Color(0xFF888888))),
-                    ],
-                  ],
+      child: Container(
+        color: bgColor,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: isHero ? 12 : 28,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (showTitle && title.isNotEmpty && !isHero)
+                AnimatedSection(
+                  delayMs: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                    child: Row(
+                      children: [
+                        if (sectionIcon != null) ...[
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: _primary.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(sectionIcon, size: 20, color: _primary),
+                          ),
+                          const SizedBox(width: 12),
+                        ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(title, style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFF1A1A2E),
+                                letterSpacing: -0.3,
+                                height: 1.1,
+                                shadows: [Shadow(blurRadius: 0, color: _primary.withValues(alpha: 0.0))],
+                              )),
+                              if (subtitle.isNotEmpty) ...[
+                                const SizedBox(height: 4),
+                                Text(subtitle, style: const TextStyle(fontSize: 14, color: Color(0xFF333333), fontWeight: FontWeight.w400)),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            content,
-          ],
+              content,
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildFooter() {
-    final footerText = _config['footer_text'] ?? '© 2026 Dietética Centro';
+    final footerText = _config['footer_text'] ?? '© 2026 Cúrcuma';
     final instagram = _config['instagram_url'] ?? '';
     final facebook = _config['facebook_url'] ?? '';
     final email = _config['email_contacto'] ?? '';
@@ -433,51 +524,97 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-      color: _primary.withValues(alpha: 0.05),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A2E),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      ),
       child: Column(
         children: [
-          Divider(color: _primary.withValues(alpha: 0.2)),
-          const SizedBox(height: 20),
+          // Logo en footer
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [_primary, _accent]),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Icon(Icons.eco, color: Colors.white, size: 28),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            _config['site_name'] ?? 'Cúrcuma',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white),
+          ),
+          const SizedBox(height: 24),
           Wrap(
             spacing: 24,
-            runSpacing: 12,
+            runSpacing: 16,
             alignment: WrapAlignment.center,
             children: [
               if (horario.isNotEmpty)
-                Row(mainAxisSize: MainAxisSize.min, children: [
-                  Icon(Icons.schedule, size: 16, color: _primary),
-                  const SizedBox(width: 6),
-                  Text(horario, style: const TextStyle(fontSize: 13, color: Color(0xFF555555))),
-                ]),
+                _footerItem(Icons.schedule, horario),
               if (email.isNotEmpty)
-                Row(mainAxisSize: MainAxisSize.min, children: [
-                  Icon(Icons.email, size: 16, color: _primary),
-                  const SizedBox(width: 6),
-                  Text(email, style: const TextStyle(fontSize: 13, color: Color(0xFF555555))),
-                ]),
-              if (instagram.isNotEmpty)
-                IconButton(
-                  icon: Icon(Icons.camera_alt, color: _primary, size: 20),
-                  onPressed: () => launchUrl(Uri.parse(instagram)),
-                  tooltip: 'Instagram',
-                ),
-              if (facebook.isNotEmpty)
-                IconButton(
-                  icon: Icon(Icons.facebook, color: _primary, size: 20),
-                  onPressed: () => launchUrl(Uri.parse(facebook)),
-                  tooltip: 'Facebook',
-                ),
+                _footerItem(Icons.email_outlined, email),
             ],
           ),
+          const SizedBox(height: 20),
+          // Social icons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (instagram.isNotEmpty)
+                _socialButton(Icons.camera_alt, instagram),
+              if (facebook.isNotEmpty)
+                _socialButton(Icons.facebook, facebook),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Container(
+            height: 1,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.transparent, Colors.white.withValues(alpha: 0.15), Colors.transparent],
+              ),
+            ),
+          ),
           const SizedBox(height: 16),
-          Text(footerText, style: const TextStyle(fontSize: 12, color: Color(0xFF888888))),
-          const SizedBox(height: 8),
-          const Text(
+          Text(footerText, style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.4))),
+          const SizedBox(height: 6),
+          Text(
             'Desarrollado por Programación JJ',
-            style: TextStyle(fontSize: 11, color: Color(0xFFAAAAAA)),
+            style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.25)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _footerItem(IconData icon, String text) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 16, color: Colors.white.withValues(alpha: 0.5)),
+        const SizedBox(width: 8),
+        Text(text, style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.7))),
+      ],
+    );
+  }
+
+  Widget _socialButton(IconData icon, String url) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: () => launchUrl(Uri.parse(url)),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+          ),
+          child: Icon(icon, color: Colors.white.withValues(alpha: 0.7), size: 22),
+        ),
       ),
     );
   }
