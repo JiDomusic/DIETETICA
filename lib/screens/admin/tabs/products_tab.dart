@@ -40,6 +40,8 @@ class _ProductsTabState extends State<ProductsTab> {
     return _products.where((p) => p['category_id'] == _filterCategory).toList();
   }
 
+  bool get _isMobile => MediaQuery.of(context).size.width < 700;
+
   @override
   Widget build(BuildContext context) {
     if (_loading) return const Center(child: CircularProgressIndicator());
@@ -49,15 +51,21 @@ class _ProductsTabState extends State<ProductsTab> {
         // Barra superior
         Container(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const Icon(Icons.inventory_2, color: Color(0xFF66BB6A)),
-              const SizedBox(width: 8),
-              Text('Productos (${_filtered.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              const SizedBox(width: 16),
-              // Filtro por categoría
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.inventory_2, color: Color(0xFFF0A830)),
+                  const SizedBox(width: 8),
+                  Text('Productos (${_filtered.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
               SizedBox(
-                width: 200,
+                width: _isMobile ? double.infinity : 200,
                 child: DropdownButtonFormField<String>(
                   value: _filterCategory.isEmpty ? null : _filterCategory,
                   decoration: const InputDecoration(
@@ -73,11 +81,13 @@ class _ProductsTabState extends State<ProductsTab> {
                   onChanged: (v) => setState(() => _filterCategory = v ?? ''),
                 ),
               ),
-              const Spacer(),
-              ElevatedButton.icon(
-                onPressed: _addProduct,
-                icon: const Icon(Icons.add, size: 18),
-                label: const Text('Nuevo Producto'),
+              SizedBox(
+                width: _isMobile ? double.infinity : null,
+                child: ElevatedButton.icon(
+                  onPressed: _addProduct,
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Nuevo Producto'),
+                ),
               ),
             ],
           ),
@@ -86,7 +96,7 @@ class _ProductsTabState extends State<ProductsTab> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'Creá, editá y eliminá productos. Subí imagen JPG/PNG, asigná categoría, precio y marcá como nuevo, destacado o promo.',
-            style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+            style: TextStyle(fontSize: 12, color: Color(0xFF777777)),
           ),
         ),
         const SizedBox(height: 8),
@@ -101,7 +111,12 @@ class _ProductsTabState extends State<ProductsTab> {
               final catName = (p['categories'] as Map?)?['name'] as String? ?? 'Sin categoría';
 
               return Card(
-                color: const Color(0xFF1A2230),
+                color: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Color(0xFFE8E8E8)),
+                ),
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
                   leading: ClipRRect(
@@ -109,25 +124,25 @@ class _ProductsTabState extends State<ProductsTab> {
                     child: imgPath.isNotEmpty
                         ? Image.network(_svc.getPublicImageUrl(imgPath), width: 50, height: 50, fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) => const Icon(Icons.image, size: 40))
-                        : Container(width: 50, height: 50, color: const Color(0xFF2A3545), child: const Icon(Icons.eco, size: 24, color: Color(0xFF66BB6A))),
+                        : Container(width: 50, height: 50, decoration: BoxDecoration(color: const Color(0xFFFFF3E0), borderRadius: BorderRadius.circular(8)), child: const Icon(Icons.eco, size: 24, color: Color(0xFFF0A830))),
                   ),
                   title: Row(
                     children: [
-                      Expanded(child: Text(p['name'] as String? ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
-                      if (p['is_promo'] == true) _chip('PROMO', const Color(0xFFFF8F00)),
-                      if (p['is_new'] == true) _chip('NUEVO', const Color(0xFF2E7D32)),
-                      if (p['is_featured'] == true) _chip('DEST', const Color(0xFF1565C0)),
+                      Expanded(child: Text(p['name'] as String? ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A)))),
+                      if (p['is_promo'] == true) _chip('PROMO', const Color(0xFFF0A830)),
+                      if (p['is_new'] == true) _chip('NUEVO', const Color(0xFF4CAF50)),
+                      if (p['is_featured'] == true) _chip('DEST', const Color(0xFF2D2D2D)),
                     ],
                   ),
                   subtitle: Text(
                     '$catName · SKU: ${p['sku']} · \$${(p['price'] as num?)?.toStringAsFixed(2) ?? '0'} · ${p['is_active'] == true ? 'Activo' : 'Inactivo'}',
-                    style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE)),
+                    style: const TextStyle(fontSize: 11, color: Color(0xFF777777)),
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(icon: const Icon(Icons.edit, size: 18), onPressed: () => _editProduct(p)),
-                      IconButton(icon: const Icon(Icons.delete, size: 18, color: Colors.red), onPressed: () => _deleteProduct(p)),
+                      IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF2D2D2D)), onPressed: () => _editProduct(p), tooltip: 'Editar'),
+                      IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE53935)), onPressed: () => _deleteProduct(p), tooltip: 'Eliminar'),
                     ],
                   ),
                 ),
@@ -206,7 +221,7 @@ class _ProductsTabState extends State<ProductsTab> {
         builder: (ctx, setDialogState) => AlertDialog(
           title: Text(existing == null ? 'Nuevo Producto' : 'Editar Producto'),
           content: SizedBox(
-            width: 500,
+            width: MediaQuery.of(ctx).size.width < 580 ? MediaQuery.of(ctx).size.width - 80 : 500,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -237,8 +252,8 @@ class _ProductsTabState extends State<ProductsTab> {
                   const SizedBox(height: 8),
                   SwitchListTile(title: const Text('Activo'), value: isActive, onChanged: (v) => setDialogState(() => isActive = v)),
                   SwitchListTile(title: const Text('En promoción'), value: isPromo, onChanged: (v) => setDialogState(() => isPromo = v), activeColor: const Color(0xFFFF8F00)),
-                  SwitchListTile(title: const Text('Producto nuevo'), value: isNew, onChanged: (v) => setDialogState(() => isNew = v), activeColor: const Color(0xFF2E7D32)),
-                  SwitchListTile(title: const Text('Destacado'), value: isFeatured, onChanged: (v) => setDialogState(() => isFeatured = v), activeColor: const Color(0xFF1565C0)),
+                  SwitchListTile(title: const Text('Producto nuevo'), value: isNew, onChanged: (v) => setDialogState(() => isNew = v), activeColor: const Color(0xFF4CAF50)),
+                  SwitchListTile(title: const Text('Destacado'), value: isFeatured, onChanged: (v) => setDialogState(() => isFeatured = v), activeColor: const Color(0xFFF0A830)),
                 ],
               ),
             ),

@@ -57,7 +57,7 @@ class _HomeTabState extends State<HomeTab> {
         children: [
           _buildInfoCard(
             'Home - Secciones',
-            'Editá las secciones del home. Cada sección tiene título, subtítulo, layout y posición. '
+            'Editá las secciones del home. Cada sección tiene título, subtítulo, estilo visual y posición. '
             'Podés agregar, editar, reordenar y ocultar secciones.',
           ),
           const SizedBox(height: 20),
@@ -76,7 +76,7 @@ class _HomeTabState extends State<HomeTab> {
 
           // ========== BANNERS OPCIONALES ==========
           _sectionHeader('Banners Opcionales', Icons.add_photo_alternate, onAdd: _addHomeBanner),
-          const Text('Banners temporales que aparecen en el hero. Podés programar fechas.', style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          const Text('Banners temporales que aparecen en el hero. Podés programar fechas.', style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
           const SizedBox(height: 8),
           ..._homeBanners.map((b) => _buildHomeBannerCard(b)),
 
@@ -84,7 +84,7 @@ class _HomeTabState extends State<HomeTab> {
 
           // ========== NAVBAR ==========
           _sectionHeader('Barra de Navegación', Icons.menu, onAdd: _addNavItem),
-          const Text('Editá los links de la barra superior. Cada uno apunta a una sección.', style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          const Text('Editá los links de la barra superior. Cada uno apunta a una sección.', style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
           const SizedBox(height: 8),
           ..._navItems.map((n) => _buildNavItemCard(n)),
         ],
@@ -96,20 +96,20 @@ class _HomeTabState extends State<HomeTab> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF2E7D32).withValues(alpha: 0.1),
+        color: const Color(0xFFF0A830).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF2E7D32).withValues(alpha: 0.3)),
+        border: Border.all(color: const Color(0xFFF0A830).withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.info_outline, color: Color(0xFF66BB6A)),
+          const Icon(Icons.info_outline, color: Color(0xFFF0A830)),
           const SizedBox(width: 12),
           Expanded(child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
               const SizedBox(height: 4),
-              Text(desc, style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+              Text(desc, style: const TextStyle(fontSize: 12, color: Color(0xFF777777))),
             ],
           )),
         ],
@@ -122,13 +122,13 @@ class _HomeTabState extends State<HomeTab> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(icon, color: const Color(0xFF66BB6A), size: 20),
+          Icon(icon, color: const Color(0xFFF0A830), size: 20),
           const SizedBox(width: 8),
           Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
           const Spacer(),
           if (onAdd != null)
             IconButton(
-              icon: const Icon(Icons.add_circle, color: Color(0xFF66BB6A)),
+              icon: const Icon(Icons.add_circle, color: Color(0xFFF0A830)),
               onPressed: onAdd,
               tooltip: 'Agregar',
             ),
@@ -146,11 +146,11 @@ class _HomeTabState extends State<HomeTab> {
       child: ListTile(
         leading: Icon(
           published ? Icons.visibility : Icons.visibility_off,
-          color: published ? const Color(0xFF66BB6A) : const Color(0xFF8A9BAE),
+          color: published ? const Color(0xFFF0A830) : const Color(0xFF777777),
           size: 20,
         ),
         title: Text(s['title'] as String? ?? '', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-        subtitle: Text('Layout: ${s['layout']} · Posición: ${s['position']}', style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE))),
+        subtitle: Text('Estilo: ${s['layout']} · Posición: ${s['position']}', style: const TextStyle(fontSize: 11, color: Color(0xFF777777))),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -218,7 +218,7 @@ class _HomeTabState extends State<HomeTab> {
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   value: layout,
-                  decoration: const InputDecoration(labelText: 'Layout'),
+                  decoration: const InputDecoration(labelText: 'Estilo visual'),
                   items: const [
                     DropdownMenuItem(value: 'banner', child: Text('Banner hero')),
                     DropdownMenuItem(value: 'carousel', child: Text('Carrusel horizontal')),
@@ -236,7 +236,7 @@ class _HomeTabState extends State<HomeTab> {
                   title: const Text('Publicada'),
                   value: published,
                   onChanged: (v) => setDialogState(() => published = v),
-                  activeColor: const Color(0xFF66BB6A),
+                  activeColor: const Color(0xFFF0A830),
                 ),
               ],
             ),
@@ -272,7 +272,7 @@ class _HomeTabState extends State<HomeTab> {
       child: ListTile(
         leading: const Icon(Icons.panorama, size: 20),
         title: Text(b['title'] as String? ?? '(Sin título)', style: const TextStyle(fontSize: 14)),
-        subtitle: Text('Pos: ${b['position']} · ${b['active'] == true ? 'Activo' : 'Inactivo'}', style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE))),
+        subtitle: Text('Pos: ${b['position']} · ${b['active'] == true ? 'Activo' : 'Inactivo'}', style: const TextStyle(fontSize: 11, color: Color(0xFF777777))),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -377,7 +377,7 @@ class _HomeTabState extends State<HomeTab> {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         title: Text(b['title'] as String? ?? '(Sin título)', style: const TextStyle(fontSize: 14)),
-        subtitle: Text('${b['active'] == true ? 'Activo' : 'Inactivo'}', style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE))),
+        subtitle: Text('${b['active'] == true ? 'Activo' : 'Inactivo'}', style: const TextStyle(fontSize: 11, color: Color(0xFF777777))),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -470,7 +470,7 @@ class _HomeTabState extends State<HomeTab> {
       child: ListTile(
         leading: const Icon(Icons.link, size: 18),
         title: Text(n['label'] as String? ?? '', style: const TextStyle(fontSize: 14)),
-        subtitle: Text('Apunta a: ${n['section_slug'] ?? n['url'] ?? ''}', style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE))),
+        subtitle: Text('Apunta a: ${n['section_slug'] ?? n['url'] ?? ''}', style: const TextStyle(fontSize: 11, color: Color(0xFF777777))),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

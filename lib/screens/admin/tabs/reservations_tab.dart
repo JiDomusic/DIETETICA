@@ -35,12 +35,19 @@ class _ReservationsTabState extends State<ReservationsTab> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const Icon(Icons.shopping_bag, color: Color(0xFF66BB6A)),
-              const SizedBox(width: 8),
-              Text('Reservas (${_reservations.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              const SizedBox(width: 16),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.shopping_bag, color: Color(0xFFF0A830)),
+                  const SizedBox(width: 8),
+                  Text('Reservas (${_reservations.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
               SizedBox(
                 width: 180,
                 child: DropdownButtonFormField<String>(
@@ -60,14 +67,13 @@ class _ReservationsTabState extends State<ReservationsTab> {
                   },
                 ),
               ),
-              const Spacer(),
               IconButton(icon: const Icon(Icons.refresh), onPressed: _load, tooltip: 'Actualizar'),
             ],
           ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text('Gestioná las reservas de productos. Podés confirmar, marcar como pagada, retirada o cancelar (devuelve stock).', style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          child: Text('Gestioná las reservas de productos. Podés confirmar, marcar como pagada, retirada o cancelar (devuelve stock).', style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
         ),
         Expanded(
           child: ListView.builder(
@@ -81,7 +87,7 @@ class _ReservationsTabState extends State<ReservationsTab> {
               final date = DateTime.tryParse(r['created_at'] as String? ?? '')?.toLocal();
 
               return Card(
-                color: const Color(0xFF1A2230),
+                color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 8),
                 child: Padding(
                   padding: const EdgeInsets.all(14),
@@ -93,14 +99,14 @@ class _ReservationsTabState extends State<ReservationsTab> {
                           _statusChip(status),
                           const SizedBox(width: 8),
                           Expanded(child: Text(productName, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
-                          Text('x${r['qty']}', style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF66BB6A))),
+                          Text('x${r['qty']}', style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFFF0A830))),
                         ],
                       ),
                       const SizedBox(height: 6),
                       Text('Cliente: ${r['customer_name'] ?? ''} · Tel: ${r['customer_phone'] ?? ''}', style: const TextStyle(fontSize: 12)),
-                      if (locationName.isNotEmpty) Text('Sucursal: $locationName', style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
-                      if ((r['payment_ref'] as String? ?? '').isNotEmpty) Text('Comprobante: ${r['payment_ref']}', style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
-                      if (date != null) Text('Fecha: ${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}', style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE))),
+                      if (locationName.isNotEmpty) Text('Sucursal: $locationName', style: const TextStyle(fontSize: 12, color: Color(0xFF777777))),
+                      if ((r['payment_ref'] as String? ?? '').isNotEmpty) Text('Comprobante: ${r['payment_ref']}', style: const TextStyle(fontSize: 12, color: Color(0xFF777777))),
+                      if (date != null) Text('Fecha: ${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}', style: const TextStyle(fontSize: 11, color: Color(0xFF777777))),
                       const SizedBox(height: 8),
                       // Acciones
                       Wrap(
@@ -109,9 +115,9 @@ class _ReservationsTabState extends State<ReservationsTab> {
                           if (status == 'pending')
                             _actionBtn('Confirmar', Icons.check, Colors.blue, () => _updateStatus(r, 'confirmed')),
                           if (status == 'confirmed')
-                            _actionBtn('Marcar Pagada', Icons.payment, const Color(0xFF66BB6A), () => _updateStatus(r, 'paid')),
+                            _actionBtn('Marcar Pagada', Icons.payment, const Color(0xFFF0A830), () => _updateStatus(r, 'paid')),
                           if (status == 'paid')
-                            _actionBtn('Retirada', Icons.shopping_bag, const Color(0xFF2E7D32), () => _updateStatus(r, 'picked_up')),
+                            _actionBtn('Retirada', Icons.shopping_bag, const Color(0xFF4CAF50), () => _updateStatus(r, 'picked_up')),
                           if (status != 'canceled' && status != 'picked_up')
                             _actionBtn('Cancelar', Icons.cancel, Colors.red, () => _cancel(r)),
                         ],
@@ -133,10 +139,10 @@ class _ReservationsTabState extends State<ReservationsTab> {
     switch (status) {
       case 'pending': color = Colors.orange; label = 'Pendiente'; break;
       case 'confirmed': color = Colors.blue; label = 'Confirmada'; break;
-      case 'paid': color = const Color(0xFF66BB6A); label = 'Pagada'; break;
-      case 'picked_up': color = const Color(0xFF2E7D32); label = 'Retirada'; break;
+      case 'paid': color = const Color(0xFFF0A830); label = 'Pagada'; break;
+      case 'picked_up': color = const Color(0xFF4CAF50); label = 'Retirada'; break;
       case 'canceled': color = Colors.red; label = 'Cancelada'; break;
-      default: color = const Color(0xFF8A9BAE); label = status;
+      default: color = const Color(0xFF777777); label = status;
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),

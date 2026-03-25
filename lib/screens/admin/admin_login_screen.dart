@@ -56,7 +56,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
           child: SizedBox(
             width: cardWidth,
             child: Card(
-              color: const Color(0xFF141A22),
+              color: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               elevation: 8,
               child: Padding(
@@ -72,9 +72,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         height: 72,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF66BB6A)]),
+                          gradient: const LinearGradient(colors: [Color(0xFFF0A830), Color(0xFFF5C563)]),
                           boxShadow: [
-                            BoxShadow(color: const Color(0xFF2E7D32).withValues(alpha: 0.3), blurRadius: 20),
+                            BoxShadow(color: const Color(0xFFF0A830).withValues(alpha: 0.3), blurRadius: 20),
                           ],
                         ),
                         child: const Icon(Icons.admin_panel_settings, size: 36, color: Colors.white),
@@ -87,7 +87,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       const SizedBox(height: 6),
                       const Text(
                         'Ingresá con tu cuenta de admin',
-                        style: TextStyle(fontSize: 13, color: Color(0xFF8A9BAE)),
+                        style: TextStyle(fontSize: 13, color: Color(0xFF777777)),
                       ),
                       const SizedBox(height: 28),
 
@@ -152,7 +152,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: const Text('← Volver a la tienda', style: TextStyle(color: Color(0xFF8A9BAE))),
+                        child: const Text('← Volver a la tienda', style: TextStyle(color: Color(0xFF777777))),
                       ),
                     ],
                   ),

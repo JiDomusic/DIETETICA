@@ -59,7 +59,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
     final isMobile = MediaQuery.of(context).size.width < 900;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF8F8F8),
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        foregroundColor: const Color(0xFF1A1A1A),
         title: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -87,7 +91,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           tabs: _tabs,
           indicatorColor: const Color(0xFFF0A830),
           labelColor: const Color(0xFFF0A830),
-          unselectedLabelColor: const Color(0xFF8A9BAE),
+          unselectedLabelColor: const Color(0xFF999999),
           tabAlignment: TabAlignment.start,
         ),
       ),

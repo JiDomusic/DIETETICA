@@ -34,19 +34,26 @@ class _VideosTabState extends State<VideosTab> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const Icon(Icons.play_circle, color: Color(0xFF66BB6A)),
-              const SizedBox(width: 8),
-              Text('Videos (${_videos.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              const Spacer(),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.play_circle, color: Color(0xFFF0A830)),
+                  const SizedBox(width: 8),
+                  Text('Videos (${_videos.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
               ElevatedButton.icon(onPressed: _add, icon: const Icon(Icons.add, size: 18), label: const Text('Agregar Video')),
             ],
           ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text('Agregá videos de YouTube u otra URL. Ponés título, descripción y opcionalmente una miniatura JPG/PNG.', style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          child: Text('Agregá videos de YouTube u otra URL. Ponés título, descripción y opcionalmente una miniatura JPG/PNG.', style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
         ),
         Expanded(
           child: ListView.builder(
@@ -55,13 +62,13 @@ class _VideosTabState extends State<VideosTab> {
             itemBuilder: (context, i) {
               final v = _videos[i];
               return Card(
-                color: const Color(0xFF1A2230),
+                color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
                   leading: const Icon(Icons.play_circle_fill, color: Color(0xFFFF8F00)),
                   title: Text(v['title'] as String? ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
                   subtitle: Text('${v['video_url'] ?? ''}\n${v['active'] == true ? 'Activo' : 'Inactivo'}',
-                    style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE))),
+                    style: const TextStyle(fontSize: 11, color: Color(0xFF777777))),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

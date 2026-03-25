@@ -55,14 +55,21 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Filtros
-          Row(
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const Icon(Icons.analytics, color: Color(0xFF66BB6A)),
-              const SizedBox(width: 8),
-              const Text('Analytics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-              const Spacer(),
+              const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.analytics, color: Color(0xFFF0A830)),
+                  SizedBox(width: 8),
+                  Text('Analytics', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                ],
+              ),
               SizedBox(
-                width: 200,
+                width: MediaQuery.of(context).size.width < 700 ? double.infinity : 200,
                 child: DropdownButtonFormField<String>(
                   value: _selectedLocation,
                   decoration: const InputDecoration(labelText: 'Sucursal', contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
@@ -73,9 +80,8 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                   onChanged: (v) { _selectedLocation = v; _load(); },
                 ),
               ),
-              const SizedBox(width: 12),
               SizedBox(
-                width: 120,
+                width: MediaQuery.of(context).size.width < 700 ? double.infinity : 120,
                 child: DropdownButtonFormField<int>(
                   value: _days,
                   decoration: const InputDecoration(labelText: 'Periodo', contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
@@ -90,7 +96,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
             ],
           ),
           const SizedBox(height: 8),
-          const Text('Estadísticas de productos más vistos, más vendidos y alertas de stock bajo.', style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          const Text('Estadísticas de productos más vistos, más vendidos y alertas de stock bajo.', style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
 
           const SizedBox(height: 24),
 
@@ -118,9 +124,9 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
           _card(
             'Productos Más Vistos',
             Icons.visibility,
-            const Color(0xFF66BB6A),
+            const Color(0xFFF0A830),
             _topProducts.isEmpty
-                ? const Padding(padding: EdgeInsets.all(16), child: Text('Sin datos aún', style: TextStyle(color: Color(0xFF8A9BAE))))
+                ? const Padding(padding: EdgeInsets.all(16), child: Text('Sin datos aún', style: TextStyle(color: Color(0xFF777777))))
                 : Column(
                     children: _topProducts.asMap().entries.map((entry) {
                       final i = entry.key;
@@ -129,11 +135,11 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                         dense: true,
                         leading: CircleAvatar(
                           radius: 14,
-                          backgroundColor: const Color(0xFF2E7D32),
+                          backgroundColor: const Color(0xFFF0A830),
                           child: Text('${i + 1}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
                         ),
                         title: Text(p['product_name'] as String? ?? ''),
-                        trailing: Text('${p['view_count']} vistas', style: const TextStyle(color: Color(0xFF66BB6A), fontWeight: FontWeight.w600)),
+                        trailing: Text('${p['view_count']} vistas', style: const TextStyle(color: Color(0xFFF0A830), fontWeight: FontWeight.w600)),
                       );
                     }).toList(),
                   ),
@@ -146,7 +152,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
             Icons.trending_up,
             const Color(0xFFFF8F00),
             _salesSummary.isEmpty
-                ? const Padding(padding: EdgeInsets.all(16), child: Text('Sin movimientos', style: TextStyle(color: Color(0xFF8A9BAE))))
+                ? const Padding(padding: EdgeInsets.all(16), child: Text('Sin movimientos', style: TextStyle(color: Color(0xFF777777))))
                 : Column(
                     children: _salesSummary.map((s) {
                       return ListTile(
@@ -157,7 +163,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                           children: [
                             Text('Vendido: ${s['total_sold']}', style: const TextStyle(color: Color(0xFFFF8F00), fontSize: 12)),
                             const SizedBox(width: 12),
-                            Text('Devuelto: ${s['total_returned']}', style: const TextStyle(color: Color(0xFF8A9BAE), fontSize: 12)),
+                            Text('Devuelto: ${s['total_returned']}', style: const TextStyle(color: Color(0xFF777777), fontSize: 12)),
                           ],
                         ),
                       );
@@ -173,8 +179,9 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF1A2230),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE8E8E8)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

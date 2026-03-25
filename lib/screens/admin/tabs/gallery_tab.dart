@@ -34,19 +34,26 @@ class _GalleryTabState extends State<GalleryTab> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const Icon(Icons.photo_library, color: Color(0xFF66BB6A)),
-              const SizedBox(width: 8),
-              Text('Galería (${_items.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              const Spacer(),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.photo_library, color: Color(0xFFF0A830)),
+                  const SizedBox(width: 8),
+                  Text('Galería (${_items.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
               ElevatedButton.icon(onPressed: _add, icon: const Icon(Icons.add, size: 18), label: const Text('Agregar')),
             ],
           ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text('Subí fotos de tus locales, productos, equipo. Aparecen en el carrusel de galería del home. Solo JPG/PNG.', style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          child: Text('Subí fotos de tus locales, productos, equipo. Aparecen en el carrusel de galería del home. Solo JPG/PNG.', style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
         ),
         Expanded(
           child: GridView.builder(
@@ -64,8 +71,8 @@ class _GalleryTabState extends State<GalleryTab> {
                     borderRadius: BorderRadius.circular(12),
                     child: imgPath.isNotEmpty
                         ? Image.network(_svc.getPublicImageUrl(imgPath), fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(color: const Color(0xFF2A3545), child: const Icon(Icons.broken_image)))
-                        : Container(color: const Color(0xFF2A3545)),
+                            errorBuilder: (_, __, ___) => Container(color: const Color(0xFFFFF3E0), child: const Icon(Icons.broken_image)))
+                        : Container(color: const Color(0xFFFFF3E0)),
                   ),
                   Positioned(
                     bottom: 0, left: 0, right: 0,

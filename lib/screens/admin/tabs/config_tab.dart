@@ -87,18 +87,18 @@ class _ConfigTabState extends State<ConfigTab> {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF141A22),
-        title: Text(label, style: const TextStyle(color: Color(0xFFF5F5F5))),
+        backgroundColor: const Color(0xFFFFF3E0),
+        title: Text(label, style: const TextStyle(color: Color(0xFF333333))),
         content: SingleChildScrollView(
           child: ColorPicker(
             color: current,
             onColorChanged: (c) => picked = c,
             heading: const Text('Elegí un color',
-                style: TextStyle(color: Color(0xFF8A9BAE), fontSize: 14)),
+                style: TextStyle(color: Color(0xFF777777), fontSize: 14)),
             subheading: const Text('Tono',
-                style: TextStyle(color: Color(0xFF8A9BAE), fontSize: 13)),
+                style: TextStyle(color: Color(0xFF777777), fontSize: 13)),
             wheelSubheading: const Text('Opacidad',
-                style: TextStyle(color: Color(0xFF8A9BAE), fontSize: 13)),
+                style: TextStyle(color: Color(0xFF777777), fontSize: 13)),
             pickersEnabled: const <ColorPickerType, bool>{
               ColorPickerType.wheel: true,
               ColorPickerType.accent: false,
@@ -166,7 +166,7 @@ class _ConfigTabState extends State<ConfigTab> {
           Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
           const SizedBox(height: 2),
           Text(_colorToHex(color),
-              style: const TextStyle(fontSize: 10, color: Color(0xFF8A9BAE), fontFamily: 'monospace')),
+              style: const TextStyle(fontSize: 10, color: Color(0xFF777777), fontFamily: 'monospace')),
         ],
       ),
     );
@@ -213,18 +213,18 @@ class _ConfigTabState extends State<ConfigTab> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF2E7D32).withValues(alpha: 0.1),
+              color: const Color(0xFFF0A830).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF2E7D32).withValues(alpha: 0.3)),
+              border: Border.all(color: const Color(0xFFF0A830).withValues(alpha: 0.3)),
             ),
             child: const Row(
               children: [
-                Icon(Icons.settings, color: Color(0xFF66BB6A)),
+                Icon(Icons.settings, color: Color(0xFFF0A830)),
                 SizedBox(width: 12),
                 Expanded(child: Text(
                   'Configuración general del sitio. Todo lo que editás acá se refleja en el home público. '
                   'Cambiá nombre, colores, datos de contacto, CBU para pagos, redes sociales y más.',
-                  style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+                  style: TextStyle(fontSize: 12, color: Color(0xFF777777)),
                 )),
               ],
             ),
@@ -252,7 +252,7 @@ class _ConfigTabState extends State<ConfigTab> {
           // ========== COLORES DE MARCA ==========
           Row(
             children: [
-              const Icon(Icons.palette, color: Color(0xFF66BB6A)),
+              const Icon(Icons.palette, color: Color(0xFFF0A830)),
               const SizedBox(width: 8),
               const Text('Colores de tu Marca', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             ],
@@ -261,7 +261,7 @@ class _ConfigTabState extends State<ConfigTab> {
           const Text(
             'Tocá cada círculo para abrir la rueda de colores y elegir el que quieras. '
             'Los colores se aplican en toda la web: botones, bordes, acentos, etc.',
-            style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+            style: TextStyle(fontSize: 12, color: Color(0xFF777777)),
           ),
           const SizedBox(height: 20),
 
@@ -269,9 +269,9 @@ class _ConfigTabState extends State<ConfigTab> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A2230),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFF2A3545)),
+              border: Border.all(color: const Color(0xFFFFF3E0)),
             ),
             child: Column(
               children: [
@@ -297,7 +297,7 @@ class _ConfigTabState extends State<ConfigTab> {
                 ),
                 const SizedBox(height: 20),
                 // Preview en vivo
-                const Text('Vista previa', style: TextStyle(fontSize: 13, color: Color(0xFF8A9BAE))),
+                const Text('Vista previa', style: TextStyle(fontSize: 13, color: Color(0xFF777777))),
                 const SizedBox(height: 12),
                 Row(
                   children: [
@@ -364,7 +364,7 @@ class _ConfigTabState extends State<ConfigTab> {
             'Si tu sitio tiene datos de ejemplo (demo), podés eliminarlos para empezar '
             'a cargar los productos reales de tu local. Esto borra productos, promos, '
             'stock, sucursales, galería y videos de ejemplo. Las categorías y secciones se mantienen.',
-            style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+            style: TextStyle(fontSize: 12, color: Color(0xFF777777)),
           ),
           const SizedBox(height: 12),
           Container(
@@ -384,7 +384,7 @@ class _ConfigTabState extends State<ConfigTab> {
                     Expanded(child: Text(
                       'Esta acción no se puede deshacer. Solo eliminá los datos demo '
                       'cuando estés listo para cargar tus productos reales.',
-                      style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+                      style: TextStyle(fontSize: 12, color: Color(0xFF777777)),
                     )),
                   ],
                 ),
@@ -410,7 +410,7 @@ class _ConfigTabState extends State<ConfigTab> {
           // ========== ADMINS ==========
           Row(
             children: [
-              const Icon(Icons.admin_panel_settings, color: Color(0xFF66BB6A)),
+              const Icon(Icons.admin_panel_settings, color: Color(0xFFF0A830)),
               const SizedBox(width: 8),
               const Text('Administradores', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
               const Spacer(),
@@ -423,19 +423,19 @@ class _ConfigTabState extends State<ConfigTab> {
             ],
           ),
           const SizedBox(height: 4),
-          Text('Máximo 3 admins. Actual: ${_admins.length}/3', style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          Text('Máximo 3 admins. Actual: ${_admins.length}/3', style: const TextStyle(fontSize: 12, color: Color(0xFF777777))),
           const SizedBox(height: 12),
 
           ..._admins.map((a) {
             final uid = a['user_id'] as String;
             final isCurrentUser = uid == _svc.currentUser?.id;
             return Card(
-              color: const Color(0xFF1A2230),
+              color: Colors.white,
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
-                leading: Icon(Icons.person, color: isCurrentUser ? const Color(0xFF66BB6A) : const Color(0xFF8A9BAE)),
+                leading: Icon(Icons.person, color: isCurrentUser ? const Color(0xFFF0A830) : const Color(0xFF777777)),
                 title: Text(uid, style: const TextStyle(fontSize: 12, fontFamily: 'monospace')),
-                subtitle: Text('Rol: ${a['role']} ${isCurrentUser ? '(vos)' : ''}', style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE))),
+                subtitle: Text('Rol: ${a['role']} ${isCurrentUser ? '(vos)' : ''}', style: const TextStyle(fontSize: 11, color: Color(0xFF777777))),
                 trailing: isCurrentUser
                     ? null
                     : IconButton(
@@ -452,7 +452,7 @@ class _ConfigTabState extends State<ConfigTab> {
           // ========== LOGO ==========
           const Text('Logo del Sitio', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
           const SizedBox(height: 4),
-          const Text('Subí tu logo en JPG o PNG. Se muestra en el splash y el navbar.', style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          const Text('Subí tu logo en JPG o PNG. Se muestra en el splash y el navbar.', style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
           const SizedBox(height: 12),
           ImagePickerField(
             currentPath: _config['logo_path'] ?? '',
@@ -534,7 +534,7 @@ class _ConfigTabState extends State<ConfigTab> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text('Creá un nuevo usuario admin. Se registra automáticamente en Supabase Auth.',
-              style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+              style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
             const SizedBox(height: 12),
             TextField(controller: emailCtrl, decoration: const InputDecoration(labelText: 'Email *')),
             const SizedBox(height: 8),

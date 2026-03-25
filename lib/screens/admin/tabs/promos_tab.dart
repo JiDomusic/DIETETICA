@@ -42,12 +42,19 @@ class _PromosTabState extends State<PromosTab> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const Icon(Icons.local_offer, color: Color(0xFFFF8F00)),
-              const SizedBox(width: 8),
-              Text('Promociones (${_promos.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              const Spacer(),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.local_offer, color: Color(0xFFFF8F00)),
+                  const SizedBox(width: 8),
+                  Text('Promociones (${_promos.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
               ElevatedButton.icon(
                 onPressed: _addPromo,
                 icon: const Icon(Icons.add, size: 18),
@@ -59,7 +66,7 @@ class _PromosTabState extends State<PromosTab> {
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text('Creá promociones para tus productos. Podés poner descuento %, precio promo, texto y fechas.', style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE))),
+          child: Text('Creá promociones para tus productos. Podés poner descuento %, precio promo, texto y fechas.', style: TextStyle(fontSize: 12, color: Color(0xFF777777))),
         ),
         Expanded(
           child: ListView.builder(
@@ -73,14 +80,14 @@ class _PromosTabState extends State<PromosTab> {
               final active = promo['active'] == true;
 
               return Card(
-                color: const Color(0xFF1A2230),
+                color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  leading: Icon(Icons.local_offer, color: active ? const Color(0xFFFF8F00) : const Color(0xFF8A9BAE)),
+                  leading: Icon(Icons.local_offer, color: active ? const Color(0xFFFF8F00) : const Color(0xFF777777)),
                   title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
                   subtitle: Text(
                     '$productName · ${discount != null ? '-${discount.toStringAsFixed(0)}%' : ''} · ${active ? 'Activa' : 'Inactiva'}',
-                    style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE)),
+                    style: const TextStyle(fontSize: 11, color: Color(0xFF777777)),
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,

@@ -34,12 +34,19 @@ class _LocationsTabState extends State<LocationsTab> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const Icon(Icons.store, color: Color(0xFF66BB6A)),
-              const SizedBox(width: 8),
-              Text('Sucursales (${_locations.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              const Spacer(),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.store, color: Color(0xFFF0A830)),
+                  const SizedBox(width: 8),
+                  Text('Sucursales (${_locations.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
               ElevatedButton.icon(onPressed: _add, icon: const Icon(Icons.add, size: 18), label: const Text('Nueva Sucursal')),
             ],
           ),
@@ -48,7 +55,7 @@ class _LocationsTabState extends State<LocationsTab> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'Cargá las 3 sucursales con nombre, dirección completa (se genera mapa automático con Google Maps), teléfono, WhatsApp, horario e imagen.',
-            style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+            style: TextStyle(fontSize: 12, color: Color(0xFF777777)),
           ),
         ),
         Expanded(
@@ -58,7 +65,7 @@ class _LocationsTabState extends State<LocationsTab> {
             itemBuilder: (context, i) {
               final loc = _locations[i];
               return Card(
-                color: const Color(0xFF1A2230),
+                color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 12),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -67,7 +74,7 @@ class _LocationsTabState extends State<LocationsTab> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.store, color: Color(0xFF66BB6A), size: 20),
+                          const Icon(Icons.store, color: Color(0xFFF0A830), size: 20),
                           const SizedBox(width: 8),
                           Expanded(child: Text(loc['name'] as String? ?? '', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700))),
                           IconButton(icon: const Icon(Icons.edit, size: 18), onPressed: () => _edit(loc)),
@@ -102,9 +109,9 @@ class _LocationsTabState extends State<LocationsTab> {
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
-          Icon(icon, size: 14, color: const Color(0xFF8A9BAE)),
+          Icon(icon, size: 14, color: const Color(0xFF777777)),
           const SizedBox(width: 8),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)))),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 12, color: Color(0xFF777777)))),
         ],
       ),
     );
@@ -153,7 +160,7 @@ class _LocationsTabState extends State<LocationsTab> {
         builder: (ctx, setDialogState) => AlertDialog(
           title: Text(existing == null ? 'Nueva Sucursal' : 'Editar Sucursal'),
           content: SizedBox(
-            width: 500,
+            width: MediaQuery.of(ctx).size.width < 580 ? MediaQuery.of(ctx).size.width - 80 : 500,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

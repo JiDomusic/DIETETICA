@@ -47,6 +47,8 @@ class _StockTabState extends State<StockTab> {
     return _stock.where((s) => s['location_id'] == _filterLocation).toList();
   }
 
+  bool get _isMobile => MediaQuery.of(context).size.width < 700;
+
   @override
   Widget build(BuildContext context) {
     if (_loading) return const Center(child: CircularProgressIndicator());
@@ -58,19 +60,24 @@ class _StockTabState extends State<StockTab> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  const Icon(Icons.warehouse, color: Color(0xFF66BB6A)),
-                  const SizedBox(width: 8),
-                  Text('Stock por Sucursal (${_filtered.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                  const Spacer(),
-                  // Toggle movimientos
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.warehouse, color: Color(0xFFF0A830)),
+                      const SizedBox(width: 8),
+                      Text('Stock (${_filtered.length})', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    ],
+                  ),
                   TextButton.icon(
                     onPressed: () => setState(() => _showMovements = !_showMovements),
                     icon: Icon(_showMovements ? Icons.inventory : Icons.history, size: 16),
                     label: Text(_showMovements ? 'Ver Stock' : 'Ver Movimientos'),
                   ),
-                  const SizedBox(width: 8),
                   ElevatedButton.icon(
                     onPressed: _addStock,
                     icon: const Icon(Icons.add, size: 18),
@@ -80,14 +87,13 @@ class _StockTabState extends State<StockTab> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Acá ves el stock de cada producto en cada sucursal. Podés ajustar cantidades manualmente o mediante POS sync. '
+                'Acá ves el stock de cada producto en cada sucursal. Podés ajustar cantidades manualmente. '
                 'Los movimientos registran cada cambio.',
-                style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+                style: TextStyle(fontSize: 12, color: Color(0xFF777777)),
               ),
               const SizedBox(height: 8),
-              // Filtro
               SizedBox(
-                width: 250,
+                width: _isMobile ? double.infinity : 250,
                 child: DropdownButtonFormField<String>(
                   value: _filterLocation.isEmpty ? null : _filterLocation,
                   decoration: const InputDecoration(labelText: 'Filtrar por sucursal', contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
@@ -122,13 +128,13 @@ class _StockTabState extends State<StockTab> {
         final isLow = qty <= minQty;
 
         return Card(
-          color: const Color(0xFF1A2230),
+          color: Colors.white,
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: isLow ? Colors.red.withValues(alpha: 0.2) : const Color(0xFF2E7D32).withValues(alpha: 0.2),
+              backgroundColor: isLow ? Colors.red.withValues(alpha: 0.2) : const Color(0xFF4CAF50).withValues(alpha: 0.2),
               child: Text('$qty', style: TextStyle(
-                color: isLow ? Colors.red : const Color(0xFF66BB6A),
+                color: isLow ? Colors.red : const Color(0xFFF0A830),
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               )),
@@ -136,7 +142,7 @@ class _StockTabState extends State<StockTab> {
             title: Text('$productName ($sku)', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
             subtitle: Text(
               '$locationName · Min: $minQty ${isLow ? '⚠️ STOCK BAJO' : ''}',
-              style: TextStyle(fontSize: 11, color: isLow ? Colors.red : const Color(0xFF8A9BAE)),
+              style: TextStyle(fontSize: 11, color: isLow ? Colors.red : const Color(0xFF777777)),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -147,7 +153,7 @@ class _StockTabState extends State<StockTab> {
                   onPressed: () => _adjustStock(s, -1),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.add_circle_outline, size: 20, color: Color(0xFF66BB6A)),
+                  icon: const Icon(Icons.add_circle_outline, size: 20, color: Color(0xFFF0A830)),
                   tooltip: 'Incrementar',
                   onPressed: () => _adjustStock(s, 1),
                 ),
@@ -177,17 +183,17 @@ class _StockTabState extends State<StockTab> {
         final date = DateTime.tryParse(m['created_at'] as String? ?? '')?.toLocal();
 
         return Card(
-          color: const Color(0xFF1A2230),
+          color: Colors.white,
           margin: const EdgeInsets.only(bottom: 6),
           child: ListTile(
             leading: Icon(
               delta > 0 ? Icons.arrow_upward : Icons.arrow_downward,
-              color: delta > 0 ? const Color(0xFF66BB6A) : Colors.red,
+              color: delta > 0 ? const Color(0xFFF0A830) : Colors.red,
               size: 20,
             ),
             title: Text('$productName: ${delta > 0 ? '+' : ''}$delta', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
             subtitle: Text('$locationName · $reason · ${date != null ? '${date.day}/${date.month} ${date.hour}:${date.minute.toString().padLeft(2, '0')}' : ''}',
-              style: const TextStyle(fontSize: 11, color: Color(0xFF8A9BAE))),
+              style: const TextStyle(fontSize: 11, color: Color(0xFF777777))),
           ),
         );
       },
