@@ -351,6 +351,62 @@ class _ConfigTabState extends State<ConfigTab> {
 
           const SizedBox(height: 40),
 
+          // ========== DATOS DEMO ==========
+          Row(
+            children: [
+              const Icon(Icons.cleaning_services, color: Color(0xFFFF8F00)),
+              const SizedBox(width: 8),
+              const Text('Datos de Ejemplo', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            ],
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Si tu sitio tiene datos de ejemplo (demo), podés eliminarlos para empezar '
+            'a cargar los productos reales de tu local. Esto borra productos, promos, '
+            'stock, sucursales, galería y videos de ejemplo. Las categorías y secciones se mantienen.',
+            style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF8F00).withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFFF8F00).withValues(alpha: 0.3)),
+            ),
+            child: Column(
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.warning_amber_rounded, color: Color(0xFFFF8F00), size: 20),
+                    SizedBox(width: 8),
+                    Expanded(child: Text(
+                      'Esta acción no se puede deshacer. Solo eliminá los datos demo '
+                      'cuando estés listo para cargar tus productos reales.',
+                      style: TextStyle(fontSize: 12, color: Color(0xFF8A9BAE)),
+                    )),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _cleanDemoData,
+                    icon: const Icon(Icons.delete_sweep, size: 18),
+                    label: const Text('Eliminar Datos de Ejemplo'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF8F00),
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 40),
+
           // ========== ADMINS ==========
           Row(
             children: [
@@ -411,6 +467,59 @@ class _ConfigTabState extends State<ConfigTab> {
         ],
       ),
     );
+  }
+
+  Future<void> _cleanDemoData() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Color(0xFFFF8F00)),
+            SizedBox(width: 8),
+            Text('Eliminar datos demo'),
+          ],
+        ),
+        content: const Text(
+          '¿Estás seguro?\n\n'
+          'Se van a eliminar todos los productos de ejemplo (DEMO-*), '
+          'promos, stock, sucursales, galería y videos de ejemplo.\n\n'
+          'Las categorías y secciones se mantienen para que cargues '
+          'tus datos reales.\n\n'
+          'Esta acción NO se puede deshacer.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Sí, Eliminar Demo'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      try {
+        final res = await _svc.cleanDemoData();
+        final count = res['productos_eliminados'] ?? 0;
+        if (mounted) {
+          showSuccessSnack(context,
+            'Datos demo eliminados ($count productos). '
+            '¡Ya podés cargar los datos reales de tu local!',
+          );
+          _load();
+        }
+      } catch (e) {
+        if (mounted) showSuccessSnack(context, 'Error: $e', isError: true);
+      }
+    }
   }
 
   Future<void> _addAdmin() async {

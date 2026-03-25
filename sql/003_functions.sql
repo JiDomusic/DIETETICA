@@ -312,3 +312,49 @@ begin
   return json_build_object('success', true, 'sku', p_sku, 'new_qty', p_new_qty, 'diff', v_diff);
 end;
 $$ language plpgsql security definer;
+
+-- ===================== LIMPIAR DATOS DEMO =====================
+-- Borra todos los productos con SKU 'DEMO-%' y datos asociados
+-- Solo admins pueden ejecutar
+create or replace function clean_demo_data()
+returns json as $$
+declare
+  v_count int;
+begin
+  if not is_admin() then
+    raise exception 'No autorizado';
+  end if;
+
+  -- Contar productos demo antes de borrar
+  select count(*) into v_count from products where sku like 'DEMO-%';
+
+  -- Borrar en orden de dependencias
+  delete from promos where product_id in (select id from products where sku like 'DEMO-%');
+  delete from reservations where product_id in (select id from products where sku like 'DEMO-%');
+  delete from stock where product_id in (select id from products where sku like 'DEMO-%');
+  delete from stock_movements where product_id in (select id from products where sku like 'DEMO-%');
+  delete from product_views where product_id in (select id from products where sku like 'DEMO-%');
+  delete from section_products where product_id in (select id from products where sku like 'DEMO-%');
+  delete from products where sku like 'DEMO-%';
+
+  -- Borrar sucursales demo
+  delete from locations where id in (
+    'd0000000-0000-0000-0000-000000000001'::uuid,
+    'd0000000-0000-0000-0000-000000000002'::uuid
+  );
+
+  -- Borrar galería y videos demo (sin imagen/video real)
+  delete from gallery where image_path = '' or image_path is null;
+  delete from videos where video_url like '%dQw4w9WgXcQ%';
+
+  -- Limpiar config demo
+  update site_config set value = '' where key = 'whatsapp_default' and value = '5493414567890';
+  update site_config set value = '' where key = 'email_contacto' and value = 'info@dieteticacentro.com';
+  update site_config set value = '' where key = 'instagram_url' and value = 'https://instagram.com/dieteticacentro';
+  update site_config set value = '' where key = 'facebook_url' and value = 'https://facebook.com/dieteticacentro';
+  update site_config set value = '' where key = 'cbu_info' and value = '0000003100012345678901';
+  update site_config set value = '' where key = 'alias_cbu' and value = 'dietetica.centro';
+
+  return json_build_object('success', true, 'productos_eliminados', v_count);
+end;
+$$ language plpgsql security definer;

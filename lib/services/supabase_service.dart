@@ -427,6 +427,13 @@ class SupabaseService {
     return List<Map<String, dynamic>>.from(res);
   }
 
+  // ==================== DEMO DATA ====================
+
+  Future<Map<String, dynamic>> cleanDemoData() async {
+    final res = await _client.rpc('clean_demo_data');
+    return Map<String, dynamic>.from(res as Map);
+  }
+
   // ==================== STORAGE (IMÁGENES) ====================
 
   Future<String> uploadImage(String folder, String fileName, Uint8List bytes) async {
